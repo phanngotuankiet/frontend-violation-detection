@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { authService } from "../../../api/auth.service";
@@ -11,8 +12,8 @@ const Login = () => {
     password: "",
   });
 
-  const [error, setError] = useState(""); // State để hiển thị lỗi
-  const [loading, setLoading] = useState(false); // State để disable button khi đang xử lý
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
