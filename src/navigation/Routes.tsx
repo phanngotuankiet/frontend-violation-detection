@@ -9,14 +9,15 @@ import SuperAdmin from "../components/admin/Admin";
 interface Route {
   path: string;
   Component: ComponentType;
+  protected: boolean;
 }
 
 export const routes: Route[] = [
-  { path: "/", Component: Evaluate },
-  { path: "/evaluate", Component: Evaluate },
-  { path: "/login", Component: Login },
-  { path: "/signup", Component: SignUp },
-  { path: "/processedVideos", Component: ProcessedVideos },
-  { path: "/profile", Component: Profile },
-  { path: "/superAdmin", Component: SuperAdmin },
+  { path: "/", Component: Evaluate, protected: false },
+  { path: "/evaluate", Component: Evaluate, protected: false },
+  { path: "/login", Component: Login, protected: false },
+  { path: "/signup", Component: SignUp, protected: false },
+  { path: "/processedVideos", Component: ProcessedVideos, protected: false },
+  { path: "/profile", Component: Profile, protected: false },
+  { path: "/superAdmin", Component: SuperAdmin, protected: true },
 ];
