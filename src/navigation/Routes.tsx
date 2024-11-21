@@ -4,6 +4,7 @@ import Login from "../components/authentication/Login";
 import SignUp from "../components/authentication/SignUp";
 import ProcessedVideos from "../components/history/ProcessedVideos";
 import Profile from "../components/dashboard/Profile";
+import SuperAdmin from "../components/admin/Admin";
 
 interface Route {
   path: string;
@@ -17,4 +18,5 @@ export const routes: Route[] = [
   { path: "/signup", Component: SignUp },
   { path: "/processedVideos", Component: ProcessedVideos },
   { path: "/profile", Component: Profile },
+  { path: "/superAdmin", Component: SuperAdmin },
 ];

@@ -23,12 +23,18 @@ const Login = () => {
     try {
       const response = await authService.login(formData);
       if (response.access_token) {
-        setAccessToken(response.access_token);
-        setEmail(response.email);
-        navigate("/evaluate");
+        const roleUser = response.user.role;
+        if (roleUser === "user") {
+          setAccessToken(response.access_token);
+          setEmail(response.email);
+          navigate("/evaluate");
+        } else if (roleUser === "admin") {
+          setAccessToken(response.access_token);
+          setEmail(response.email);
+          navigate("/superAdmin");
+        }
       }
     } catch (error: any) {
-      // Xử lý các loại lỗi khác nhau
       if (error.response?.status === 404) {
         setError("Người dùng không tồn tại");
       } else if (error.response?.status === 401) {
