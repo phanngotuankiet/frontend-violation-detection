@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import EditIcon from "@mui/icons-material/Edit";
@@ -5,6 +7,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import Navbar from "./Navbar";
 import { userService } from "../../../api/user.service";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const { email } = useAuth();
@@ -47,8 +50,8 @@ const Profile = () => {
           ...prev,
           fullName: updatedUser.name || "", // Cập nhật từ response
         }));
-        // Thông báo thành công (optional)
-        // toast.success("Cập nhật thông tin thành công");
+        // Thông báo thành công (optional
+        toast.success("Cập nhật thông tin thành công");
       } catch (error: any) {
         if (error.response?.status === 404) {
           setError("Không tìm thấy người dùng");
@@ -80,7 +83,6 @@ const Profile = () => {
           )}
 
           <div className="relative">
-            {/* Cover Pattern */}
             <div className="h-48 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 rounded-t-3xl overflow-hidden">
               <div
                 className="absolute inset-0 opacity-10"
@@ -92,7 +94,6 @@ const Profile = () => {
             </div>
 
             <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 -mt-20 mx-4 relative z-10">
-              {/* Avatar Section */}
               <div className="flex flex-col items-center -mt-16">
                 <div className="relative">
                   <div className="w-32 h-32 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full p-1">

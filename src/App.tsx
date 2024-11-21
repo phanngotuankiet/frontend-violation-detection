@@ -2,6 +2,8 @@ import "./App.css";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { routes } from "./navigation/Routes";
 import ProtectedRoute from "./navigation/ProtectedRouteProvider";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -32,6 +34,7 @@ function App() {
           })}
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
+        <ToastContainer />
       </BrowserRouter>
     </>
   );
