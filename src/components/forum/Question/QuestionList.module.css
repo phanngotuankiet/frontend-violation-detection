@@ -1,0 +1,41 @@
+/* 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.questionCard {
+  margin-bottom: 16px;
+  transition: transform 0.2s;
+}
+
+.questionCard:hover {
+  transform: translateY(-2px);
+}
+
+.questionLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.questionMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  color: rgba(0, 0, 0, 0.6);
+} */
+/* src/components/Question/QuestionList.module.css */
+.container {
+  padding: 24px;
+}
+
+.questionCard {
+  margin-bottom: 16px;
+  transition: transform 0.2s;
+}
+
+.questionCard:hover {
+  transform: translateY(-2px);
+}
