@@ -12,12 +12,16 @@ interface Route {
   protected: boolean;
 }
 
-export const routes: Route[] = [
+export const LoggedInRoutes: Route[] = [
   { path: "/", Component: Evaluate, protected: false },
-  { path: "/evaluate", Component: Evaluate, protected: false },
-  { path: "/login", Component: Login, protected: false },
-  { path: "/signup", Component: SignUp, protected: false },
   { path: "/processedVideos", Component: ProcessedVideos, protected: false },
   { path: "/profile", Component: Profile, protected: false },
+  { path: "/evaluate", Component: Evaluate, protected: false },
   { path: "/superAdmin", Component: SuperAdmin, protected: true },
+];
+
+
+export const LoggedOutRoutes: Route[] = [
+  { path: "/login", Component: Login, protected: false },
+  { path: "/signup", Component: SignUp, protected: false },
 ];
