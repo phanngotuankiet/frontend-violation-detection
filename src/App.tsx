@@ -1,18 +1,21 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { routes } from "./navigation/Routes";
+import { LoggedInRoutes, LoggedOutRoutes } from "./navigation/Routes";
 import ProtectedRoute from "./navigation/ProtectedRouteProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
+  const { accessToken } = useAuth();
   return (
     <>
       <BrowserRouter>
         <Routes>
-          {routes.map((route) => {
-            if (route.protected) {
-              return (
+          {accessToken
+            ? LoggedInRoutes.map((route) => {
+                if (route.protected) {
+                  return (
                 <Route
                   key={route.path}
                   path={route.path}
@@ -31,6 +34,15 @@ function App() {
                 element={<route.Component />}
               />
             );
+          })
+          : LoggedOutRoutes.map((route) => {
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={<route.Component />}
+                />
+              );
           })}
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
