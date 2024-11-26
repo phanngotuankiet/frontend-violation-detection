@@ -1,51 +1,69 @@
+// src/context/AuthContext.tsx
+import User from "@/constant/User";
 import { createContext, useContext, useState, ReactNode } from "react";
+
+// interface User {
+//   id: number;
+//   name: string;
+//   email: string;
+//   role: string;
+// }
 
 interface AuthContextType {
   accessToken: string | null;
-  email: string | null;
+  user: User | null;
   setAccessToken: (token: string | null) => void;
   setEmail: (email: string | null) => void;
+  setUser: (user: User | null) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [accessToken, setAccessToken] = useState<string | null>(
+  const [accessToken, setAccessToken] = useState<string | null>(() =>
     localStorage.getItem("access_token")
   );
-  const [email, setEmail] = useState<string | null>(
-    localStorage.getItem("email")
-  );
+
+  const [user, setUser] = useState<User | null>(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  const handleSetAccessToken = (token: string | null) => {
+    setAccessToken(token);
+    if (token) {
+      localStorage.setItem("access_token", token);
+    } else {
+      localStorage.removeItem("access_token");
+    }
+  };
+
+  const handleSetUser = (userData: User | null) => {
+    setUser(userData);
+    if (userData) {
+      localStorage.setItem("user", JSON.stringify(userData));
+    } else {
+      localStorage.removeItem("user");
+    }
+  };
 
   const logout = () => {
-    setAccessToken(null);
-    setEmail(null);
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("email");
+    handleSetAccessToken(null);
+    handleSetUser(null);
+  };
+  const handleSetEmail = (email: string | null) => {
+    if (user && email) {
+      handleSetUser({ ...user, email });
+    }
   };
 
   const value = {
     accessToken,
-    email,
-    setAccessToken: (token: string | null) => {
-      setAccessToken(token);
-
-      if (token) {
-        localStorage.setItem("access_token", token);
-      } else {
-        localStorage.removeItem("access_token");
-      }
-    },
-    setEmail: (email: string | null) => {
-      setEmail(email);
-      
-      if (email) {
-        localStorage.setItem("email", email);
-      } else {
-        localStorage.removeItem("email");
-      }
-    },
+    user,
+    setAccessToken: handleSetAccessToken,
+    setUser: handleSetUser,
+    setEmail: handleSetEmail,
     logout,
   };
 
@@ -54,8 +72,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };

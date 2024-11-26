@@ -1,0 +1,45 @@
+.answerList {
+  padding: 0;
+}
+
+.answerItem {
+  padding: 8px 0;
+}
+
+.answerCard {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.acceptedAnswer {
+  border: 1px solid #4caf50;
+}
+
+.answerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.acceptedBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4caf50;
+}
+
+.answerFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+.acceptedAnswer {
+  border: 1px solid #4caf50;
+}
