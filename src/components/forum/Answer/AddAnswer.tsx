@@ -26,7 +26,7 @@ const AddAnswer: React.FC<AddAnswerProps> = ({ questionId, onAnswerAdded }) => {
       setContent("");
       onAnswerAdded();
     } catch (error) {
-      console.error("Failed to add answer:", error);
+      console.error("Không thể thêm câu trả lời:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -40,7 +40,7 @@ const AddAnswer: React.FC<AddAnswerProps> = ({ questionId, onAnswerAdded }) => {
         fullWidth
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Write your answer here..."
+        placeholder="Viết câu trả lời của bạn tại đây..."
         variant="outlined"
       />
       <Button
@@ -50,7 +50,7 @@ const AddAnswer: React.FC<AddAnswerProps> = ({ questionId, onAnswerAdded }) => {
         disabled={!content.trim() || isSubmitting}
         className={styles.submitButton}
       >
-        {isSubmitting ? "Posting..." : "Post Your Answer"}
+        {isSubmitting ? "Đang đăng..." : "Đăng câu trả lời"}
       </Button>
     </Box>
   );

@@ -18,7 +18,7 @@ const Navbar = () => {
   }, [accessToken]);
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 backdrop-blur-lg">
+    <nav className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 backdrop-blur-lg relative z-50">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between h-20 items-center">
           <div className="flex-shrink-0 flex items-center">
@@ -69,7 +69,7 @@ const Navbar = () => {
                 </div>
 
                 {isProfileDropdownOpen && (
-                  <div className="origin-top-right absolute right-0 mt-3 w-56 rounded-2xl shadow-xl bg-white/90 backdrop-blur-lg ring-1 ring-black/5 border border-white/20">
+                  <div className="origin-top-right absolute right-0 mt-3 w-56 rounded-2xl shadow-xl bg-white/90 backdrop-blur-lg ring-1 ring-black/5 border border-white/20 z-50">
                     <div className="py-2 divide-y divide-gray-100">
                       <div className="px-4 py-3">
                         <p className="text-sm text-gray-500">Xin chào</p>

@@ -16,8 +16,6 @@ const ListUser: React.FC<ListUserProps> = ({
   setIdToDelete,
   setIsAddUserModalOpen,
 }) => {
-  console.log("user", users);
-
   return (
     <div className="bg-white rounded-2xl shadow-2xl p-8 transform transition-all">
       <div className="flex justify-between items-center mb-6">

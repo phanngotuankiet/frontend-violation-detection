@@ -23,8 +23,6 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const user = await authService.register(formData);
-      console.log("Registration successful:", user);
-
       if (user.id) {
         alert("Registration successful!");
 
