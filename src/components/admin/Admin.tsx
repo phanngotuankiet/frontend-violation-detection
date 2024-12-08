@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddUser from "./components/AddUser";
@@ -19,7 +18,6 @@ const SuperAdmin: React.FC = () => {
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
 
   const backend = import.meta.env.VITE_BACKEND_URL;
-  const navigate = useNavigate();
 
   const fetchUsers = async () => {
     try {
@@ -57,7 +55,7 @@ const SuperAdmin: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("email");
-    navigate("/login");
+    window.location.href = "/login";
   };
 
   const handleAddUser = (newUser: User) => {
@@ -83,50 +81,46 @@ const SuperAdmin: React.FC = () => {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-6xl px-5 py-8">
-        <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-white/20 p-6">
-          <AddUser
-            onAddUser={handleAddUser}
-            onClose={() => setIsAddUserModalOpen(false)}
-            isOpen={isAddUserModalOpen}
-          />
+      <AddUser
+        onAddUser={handleAddUser}
+        onClose={() => setIsAddUserModalOpen(false)}
+        isOpen={isAddUserModalOpen}
+      />
 
-          {editUser && (
-            <UpdateUser
-              user={editUser}
-              onUpdateUser={(updatedUser) => {
-                setUsers(
-                  users.map((user) =>
-                    user.id === updatedUser.id ? updatedUser : user
-                  )
-                );
-                setEditUser(null);
-              }}
-              onCancel={() => setEditUser(null)}
-            />
-          )}
+      {editUser && (
+        <UpdateUser
+          user={editUser}
+          onUpdateUser={(updatedUser) => {
+            setUsers(
+              users.map((user) =>
+                user.id === updatedUser.id ? updatedUser : user
+              )
+            );
+            setEditUser(null);
+          }}
+          onCancel={() => setEditUser(null)}
+        />
+      )}
 
-          <ListUser
-            users={users}
-            onEditUser={handleEditUser}
-            onDeleteUser={handleDeleteUser}
-            setIdToDelete={setIdToDelete}
-            setIsAddUserModalOpen={setIsAddUserModalOpen}
-          />
+      <ListUser
+        users={users}
+        onEditUser={handleEditUser}
+        onDeleteUser={handleDeleteUser}
+        setIdToDelete={setIdToDelete}
+        setIsAddUserModalOpen={setIsAddUserModalOpen}
+      />
 
-          <OnDeleteModal
-            isOpen={idToDelete !== null}
-            onClose={() => setIdToDelete(null)}
-            onConfirm={() => {
-              if (idToDelete !== null) {
-                handleDeleteUser(idToDelete);
-                setIdToDelete(null);
-              }
-            }}
-            userName={users.find((user) => user.id === idToDelete)?.name || ""}
-          />
-        </div>
-      </div>
+      <OnDeleteModal
+        isOpen={idToDelete !== null}
+        onClose={() => setIdToDelete(null)}
+        onConfirm={() => {
+          if (idToDelete !== null) {
+            handleDeleteUser(idToDelete);
+            setIdToDelete(null);
+          }
+        }}
+        userName={users.find((user) => user.id === idToDelete)?.name || ""}
+      />
 
       <OnLogoutModal
         isOpen={isLogoutModalOpen}

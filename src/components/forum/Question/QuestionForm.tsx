@@ -48,12 +48,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         await questionApi.create({
           title,
           content,
-          userId: 1, // Replace with actual user ID from auth
+          userId: 1, // Thay thế bằng ID người dùng thực từ xác thực
         });
       }
       onSuccess();
     } catch (error) {
-      console.error("Error saving question:", error);
+      console.error("Lỗi khi lưu câu hỏi:", error);
     }
   };
 
@@ -66,7 +66,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       PaperProps={{
         sx: {
           borderRadius: 2,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+          boxShadow: "0 4px 20px rgba(37, 99, 235, 0.15)",
         },
       }}
     >
@@ -76,32 +76,46 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             borderBottom: "1px solid",
             borderColor: "divider",
             pb: 2,
+            "& .MuiTypography-root": {
+              background: "linear-gradient(to right, #2563eb, #4f46e5)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }
           }}
         >
           <Typography variant="h5" fontWeight={500}>
-            {question ? "Edit Question" : "Ask a Question"}
+            {question ? "Chỉnh sửa câu hỏi" : "Đặt câu hỏi"}
           </Typography>
         </DialogTitle>
 
         <DialogContent sx={{ py: 3 }}>
           <Stack spacing={3} sx={{ mt: 1 }}>
             <TextField
-              label="Title"
+              label="Tiêu đề"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
               fullWidth
               variant="outlined"
-              placeholder="What's your question? Be specific."
-              helperText="A good title helps others find and answer your question"
+              placeholder="Câu hỏi của bạn là gì? Hãy cụ thể."
+              helperText="Một tiêu đề tốt giúp người khác tìm và trả lời câu hỏi của bạn"
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 1.5,
+                  "&:hover fieldset": {
+                    borderColor: "#2563eb",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#2563eb",
+                  }
                 },
+                "& .MuiFormLabel-root.Mui-focused": {
+                  color: "#2563eb"
+                }
               }}
             />
             <TextField
-              label="Content"
+              label="Nội dung"
               value={content}
               onChange={(e) => setContent(e.target.value)}
               required
@@ -109,8 +123,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               rows={6}
               fullWidth
               variant="outlined"
-              placeholder="Provide details about your question..."
-              helperText="Include all the information someone would need to answer your question"
+              placeholder="Cung cấp chi tiết về câu hỏi của bạn..."
+              helperText="Bao gồm tất cả thông tin cần thiết để người khác có thể trả lời câu hỏi của bạn"
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 1.5,
@@ -138,7 +152,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               textTransform: "none",
             }}
           >
-            Cancel
+            Hủy
           </Button>
           <Button
             type="submit"
@@ -147,9 +161,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               borderRadius: 2,
               px: 3,
               textTransform: "none",
+              background: "linear-gradient(to right, #2563eb, #4f46e5)",
+              "&:hover": {
+                background: "linear-gradient(to right, #1d4ed8, #4338ca)",
+              }
             }}
           >
-            {question ? "Update" : "Post"}
+            {question ? "Cập nhật" : "Đăng"}
           </Button>
         </DialogActions>
       </form>

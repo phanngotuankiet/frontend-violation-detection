@@ -7,6 +7,7 @@ import Profile from "../components/dashboard/Profile";
 import SuperAdmin from "../components/admin/Admin";
 import QuestionList from "../components/forum/Question/QuestionList";
 import QuestionDetail from "../components/forum/Question/QuestionDetail";
+import Dashboard from "../components/dashboard/Dashboard";
 
 interface Route {
   path: string;
@@ -22,10 +23,12 @@ export const LoggedInRoutes: Route[] = [
   { path: "/superAdmin", Component: SuperAdmin, protected: true },
   { path: "/forum", Component: QuestionList, protected: false },
   { path: "questions/:id", Component: QuestionDetail, protected: false },
+  { path: "*", Component: Evaluate, protected: false },
 ];
 
 
 export const LoggedOutRoutes: Route[] = [
   { path: "/login", Component: Login, protected: false },
   { path: "/signup", Component: SignUp, protected: false },
+  { path: "/", Component: Dashboard, protected: false },
 ];

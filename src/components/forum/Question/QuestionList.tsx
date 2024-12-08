@@ -48,21 +48,7 @@ export const QuestionList: React.FC = () => {
     setQuestions(data);
   };
 
-  // const handleDelete = async (id: number) => {
-  //   if (window.confirm("Are you sure you want to delete this question?")) {
-  //     await questionApi.delete(id);
-  //     fetchQuestions();
-  //   }
-  // };
-
-  // const handleDeleteClick = (id: number) => {
-  //   setQuestionToDelete(id);
-  //   setDeleteModalOpen(true);
-  // };
-
   const handleConfirmDelete = async () => {
-    console.log("questionToDelete", questionToDelete);
-
     if (questionToDelete) {
       await questionApi.delete(questionToDelete);
       fetchQuestions();
@@ -90,30 +76,6 @@ export const QuestionList: React.FC = () => {
     <>
       <Navbar />
       <Container maxWidth="lg" className={styles.container}>
-        {/* <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={4}
-        >
-          <Typography variant="h4">Questions</Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => {
-              setSelectedQuestion(null);
-              setOpenForm(true);
-            }}
-          >
-            Ask Question
-          </Button>
-        </Stack>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
-          <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab label="All Questions" />
-            <Tab label="My Questions" />
-          </Tabs>
-        </Box> */}
         <Box sx={{ mb: 5 }}>
           <Stack
             direction="row"
@@ -130,11 +92,13 @@ export const QuestionList: React.FC = () => {
               variant="h4"
               sx={{
                 fontWeight: 600,
-                color: "primary.main",
+                background: "linear-gradient(to right, #2563eb, #4f46e5)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
                 fontSize: { xs: "1.5rem", md: "2rem" },
               }}
             >
-              Questions
+              Hỏi & Đáp
             </Typography>
             <Button
               variant="contained"
@@ -148,14 +112,15 @@ export const QuestionList: React.FC = () => {
                 px: 3,
                 py: 1,
                 textTransform: "none",
-                boxShadow: 2,
+                background: "linear-gradient(to right, #2563eb, #4f46e5)",
+                boxShadow: "0 4px 14px 0 rgba(37, 99, 235, 0.2)",
                 "&:hover": {
-                  boxShadow: 4,
-                  backgroundColor: "primary.dark",
+                  background: "linear-gradient(to right, #1d4ed8, #4338ca)",
+                  boxShadow: "0 6px 20px 0 rgba(37, 99, 235, 0.3)",
                 },
               }}
             >
-              Ask Question
+              Đặt câu hỏi
             </Button>
           </Stack>
 
@@ -176,71 +141,23 @@ export const QuestionList: React.FC = () => {
                   fontWeight: 500,
                   minWidth: 120,
                   "&.Mui-selected": {
-                    color: "primary.main",
+                    background: "linear-gradient(to right, #2563eb, #4f46e5)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
                   },
                 },
                 "& .MuiTabs-indicator": {
                   height: 3,
                   borderRadius: "3px 3px 0 0",
+                  background: "linear-gradient(to right, #2563eb, #4f46e5)",
                 },
               }}
             >
-              <Tab label="All Questions" />
-              <Tab label="My Questions" />
+              <Tab label="Tất cả câu hỏi" />
+              <Tab label="Câu hỏi của tôi" />
             </Tabs>
           </Box>
         </Box>
-        {/* <Stack spacing={2}>
-          {sortedQuestions.map((question) => (
-            <Card key={question.id}>
-              <CardContent>
-                <Link to={`/questions/${question.id}`}>
-                  <Typography variant="h6">{question.title}</Typography>
-                </Link>
-                <Typography variant="body1">{question.content}</Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Asked by {question.user.name} on{" "}
-                  {new Date(question.createdAt).toLocaleDateString()}
-                </Typography>
-
-                {currentUser?.id === question.user.id && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      gap: 2,
-                      mt: 2,
-                    }}
-                  >
-                    <Button
-                      startIcon={<EditIcon />}
-                      size="small"
-                      variant="outlined"
-                      onClick={() => {
-                        setSelectedQuestion(question);
-                        setOpenForm(true);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      startIcon={<DeleteIcon />}
-                      size="small"
-                      variant="outlined"
-                      color="error"
-                      onClick={() => {
-                        setQuestionToDelete(question.id);
-                        setDeleteModalOpen(true);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </Box>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </Stack> */}
 
         <Stack spacing={3}>
           {sortedQuestions.map((question) => (
@@ -268,6 +185,7 @@ export const QuestionList: React.FC = () => {
                       "&:hover": {
                         color: "primary.dark",
                       },
+                      textAlign: "left"
                     }}
                   >
                     {question.title}
@@ -283,6 +201,7 @@ export const QuestionList: React.FC = () => {
                     overflow: "hidden",
                     WebkitBoxOrient: "vertical",
                     WebkitLineClamp: 3,
+                    textAlign: "left"
                   }}
                 >
                   {question.content}
@@ -304,7 +223,7 @@ export const QuestionList: React.FC = () => {
                     }}
                   >
                     <Typography variant="caption" color="text.secondary">
-                      Asked by{" "}
+                      Được hỏi bởi{" "}
                       <Typography
                         component="span"
                         variant="caption"
@@ -330,8 +249,11 @@ export const QuestionList: React.FC = () => {
                         sx={{
                           borderRadius: 2,
                           textTransform: "none",
+                          borderColor: "#2563eb",
+                          color: "#2563eb",
                           "&:hover": {
-                            backgroundColor: "primary.light",
+                            borderColor: "#1d4ed8",
+                            background: "linear-gradient(to right, #2563eb, #4f46e5)",
                             color: "white",
                           },
                         }}
@@ -340,7 +262,7 @@ export const QuestionList: React.FC = () => {
                           setOpenForm(true);
                         }}
                       >
-                        Edit
+                        Sửa
                       </Button>
                       <Button
                         startIcon={<DeleteIcon />}
@@ -360,7 +282,7 @@ export const QuestionList: React.FC = () => {
                           setDeleteModalOpen(true);
                         }}
                       >
-                        Delete
+                        Xóa
                       </Button>
                     </Box>
                   )}
@@ -383,21 +305,20 @@ export const QuestionList: React.FC = () => {
           }}
         />
         <Dialog open={deleteModalOpen} onClose={handleCancelDelete}>
-          <DialogTitle>Delete Question</DialogTitle>
+          <DialogTitle>Xóa Câu Hỏi</DialogTitle>
           <DialogContent>
-            Are you sure you want to delete this question? This action cannot be
-            undone.
+            Bạn có chắc chắn muốn xóa câu hỏi này? Hành động này không thể hoàn tác.
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCancelDelete} color="primary">
-              Cancel
+              Hủy
             </Button>
             <Button
               onClick={handleConfirmDelete}
               color="error"
               variant="contained"
             >
-              Delete
+              Xóa
             </Button>
           </DialogActions>
         </Dialog>
