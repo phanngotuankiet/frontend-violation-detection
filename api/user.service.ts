@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000";
 
-// Đây là axios instance với config mặc định
 const axiosInstance = axios.create({
   baseURL: API_URL,
   withCredentials: true,
@@ -11,6 +10,7 @@ const axiosInstance = axios.create({
   },
 });
 
+// Add token to requests
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
   if (token) {
@@ -18,17 +18,6 @@ axiosInstance.interceptors.request.use((config) => {
   }
   return config;
 });
-
-export interface RegisterPayload {
-  email: string;
-  password: string;
-  name?: string;
-}
-
-export interface LoginPayload {
-  email: string;
-  password: string;
-}
 
 export interface User {
   id: number;
@@ -38,15 +27,16 @@ export interface User {
   updatedAt: string;
 }
 
-export const authService = {
-  register: async (payload: RegisterPayload) => {
-    const response = await axiosInstance.post("/auth/register", payload);
-
+export const userService = {
+  // Lấy thông tin user hiện tại
+  getProfile: async (): Promise<User> => {
+    const response = await axiosInstance.get("/users/me");
     return response.data;
   },
 
-  login: async (payload: LoginPayload) => {
-    const response = await axiosInstance.post("/auth/login", payload);
+  // Cập nhật tên user
+  updateName: async (name: string): Promise<User> => {
+    const response = await axiosInstance.patch("/users/update-name", { name });
     return response.data;
   },
 };

@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { authService } from "../../../api/auth.service";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setAccessToken, setEmail } = useAuth();
+  const { setAccessToken, setEmail, setUser } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -23,12 +24,30 @@ const Login = () => {
     try {
       const response = await authService.login(formData);
       if (response.access_token) {
-        setAccessToken(response.access_token);
-        setEmail(response.email);
-        navigate("/evaluate");
+        const roleUser = response.user.role;
+        if (roleUser === "user") {
+          setAccessToken(response.access_token);
+          // setEmail(response.email);
+          setUser({
+            id: response.user.id,
+            name: response.user.name,
+            email: response.user.email,
+            role: response.user.role,
+          });
+          navigate("/evaluate");
+        } else if (roleUser === "admin") {
+          setAccessToken(response.access_token);
+          setUser({
+            id: response.user.id,
+            name: response.user.name,
+            email: response.user.email,
+            role: response.user.role,
+          });
+          setEmail(response.email);
+          navigate("/superAdmin");
+        }
       }
     } catch (error: any) {
-      // Xử lý các loại lỗi khác nhau
       if (error.response?.status === 404) {
         setError("Người dùng không tồn tại");
       } else if (error.response?.status === 401) {

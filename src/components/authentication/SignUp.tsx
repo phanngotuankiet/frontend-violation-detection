@@ -25,7 +25,7 @@ const SignUp = () => {
       const user = await authService.register(formData);
       console.log("Registration successful:", user);
 
-      if (user.accessToken) {
+      if (user.id) {
         alert("Registration successful!");
 
         navigate("/login");

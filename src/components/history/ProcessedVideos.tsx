@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Navbar from "../dashboard/Navbar";
+import SearchBar from "../search/SearchBar";
 
 interface ProcessedVideo {
   id: string;
@@ -61,6 +62,7 @@ const ProcessedVideos = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-gray-50">
+        <SearchBar />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Video Đã Xử Lý</h1>
