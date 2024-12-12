@@ -27,7 +27,7 @@ interface AnswerListProps {
   userRole: string;
   answers: Answer[];
   questionId: number;
-  currentUserId: number | null; // Change to allow null
+  currentUserId: number | null; // Thay đổi để cho phép null
   questionAuthorId: number;
   onAnswerAccepted: (answerId: number) => Promise<void>;
   onAnswerEdit: (answerId: number, content: string) => Promise<void>;
@@ -89,6 +89,7 @@ const AnswerList: React.FC<AnswerListProps> = ({
             ${answer.isAccepted ? "ring-2 ring-emerald-500" : ""}
           `}
                 >
+                  {/* Thông tin người dùng & Thời gian */}
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-semibold text-gray-900">
                       {answer.user.name}
@@ -111,18 +112,20 @@ const AnswerList: React.FC<AnswerListProps> = ({
                       {new Date(answer.createdAt).toLocaleDateString()}
                     </span>
                     {answer.isEdited && (
-                      <span className="text-sm text-gray-500">(edited)</span>
+                      <span className="text-sm text-gray-500">
+                        (đã chỉnh sửa)
+                      </span>
                     )}
                     {answer.isAccepted && (
                       <span className="inline-flex items-center gap-1 text-sm text-emerald-600">
                         <CheckCircleIcon className="h-4 w-4" />
-                        Accepted
+                        Đã chấp nhận
                       </span>
                     )}
                     <div className="flex items-center gap-4 mt-1 px-4">
-                      {(currentUserId === answer.user.id || isAdmin) && (
+                      {currentUserId === answer.user.id && (
                         <>
-                          <Tooltip title="Edit">
+                          <Tooltip title="Chỉnh sửa">
                             <IconButton
                               size="small"
                               onClick={() => handleEditClick(answer)}
@@ -132,7 +135,7 @@ const AnswerList: React.FC<AnswerListProps> = ({
                             </IconButton>
                           </Tooltip>
 
-                          <Tooltip title="Delete">
+                          <Tooltip title="Xóa">
                             <IconButton
                               size="small"
                               onClick={() => onAnswerDelete(answer.id)}
@@ -144,7 +147,7 @@ const AnswerList: React.FC<AnswerListProps> = ({
                         </>
                       )}
                       {userRole == "admin" && !answer.isAccepted && (
-                        <Tooltip title="Accept Answer">
+                        <Tooltip title="Chấp nhận câu trả lời">
                           <IconButton
                             size="small"
                             onClick={() => onAnswerAccepted(answer.id)}
@@ -157,6 +160,7 @@ const AnswerList: React.FC<AnswerListProps> = ({
                     </div>
                   </div>
 
+                  {/* Nội dung câu trả lời */}
                   {editingId === answer.id ? (
                     <div className="space-y-3">
                       <TextField
@@ -172,13 +176,13 @@ const AnswerList: React.FC<AnswerListProps> = ({
                           onClick={handleCancelEdit}
                           className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900"
                         >
-                          Cancel
+                          Hủy
                         </button>
                         <button
                           onClick={() => handleSaveEdit(answer.id)}
                           className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                         >
-                          Save
+                          Lưu
                         </button>
                       </div>
                     </div>
@@ -191,6 +195,7 @@ const AnswerList: React.FC<AnswerListProps> = ({
                   )}
                 </div>
 
+                {/* Bình luận */}
                 <div className="mt-2 pl-4">
                   <CommentList answerId={answer.id} isAdmin={isAdmin} />
                 </div>

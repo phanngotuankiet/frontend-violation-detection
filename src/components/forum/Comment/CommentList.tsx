@@ -34,14 +34,7 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
       )
     );
   };
-  // const handleReplyClick = () => {
-  //   setShowReplyField(true);
-  // };
 
-  // const handleCancelReply = () => {
-  //   setShowReplyField(false);
-  //   setNewComment("");
-  // };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -53,7 +46,7 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
       setShowReplyField(false);
       fetchComments();
     } catch (error) {
-      console.error("Failed to add comment:", error);
+      console.error("Không thể thêm bình luận:", error);
     }
   };
 
@@ -64,7 +57,7 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
       setEditContent("");
       fetchComments();
     } catch (error) {
-      console.error("Failed to update comment:", error);
+      console.error("Không thể cập nhật bình luận:", error);
     }
   };
 
@@ -77,20 +70,23 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
       }
       fetchComments();
     } catch (error) {
-      console.error("Failed to delete comment:", error);
+      console.error("Không thể xóa bình luận:", error);
     }
   };
 
   return (
     <div className="space-y-4 mt-3">
+      {/* Nút Trả lời */}
       <div className="flex justify-end mb-2">
         <button
           onClick={() => setShowReplyField(true)}
           className="text-sm text-gray-500 hover:text-gray-700 px-2 py-1"
         >
-          Reply
+          Trả lời
         </button>
       </div>
+
+      {/* Trường Trả lời */}
       {showReplyField && (
         <div className="flex space-x-3">
           <div className="flex-shrink-0">
@@ -104,7 +100,7 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
             <TextField
               fullWidth
               size="small"
-              placeholder="Write a comment..."
+              placeholder="Viết bình luận..."
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               className="bg-white rounded-2xl"
@@ -117,25 +113,25 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
                 }}
                 className="text-sm text-gray-500 hover:text-gray-700 px-2 py-1"
               >
-                Cancel
+                Hủy
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={!newComment.trim()}
                 className="text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-lg disabled:opacity-50"
               >
-                Comment
+                Bình luận
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Comments List */}
+      {/* Danh sách Bình luận */}
       <div className="space-y-3">
         {comments.map((comment) => (
           <div key={comment.id} className="flex space-x-3">
-            {/* Comment Avatar */}
+            {/* Ảnh đại diện Bình luận */}
             <div className="flex-shrink-0">
               <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                 <span className="text-blue-600 font-medium text-sm">
@@ -144,10 +140,10 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
               </div>
             </div>
 
-            {/* Comment Content */}
+            {/* Nội dung Bình luận */}
             <div className="flex-1">
               <div className="bg-gray-100 rounded-2xl px-4 py-2">
-                {/* User Info & Timestamp */}
+                {/* Thông tin người dùng & Thời gian */}
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-semibold text-sm text-gray-900">
                     {comment.user.name}
@@ -170,34 +166,35 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
                     {new Date(comment.createdAt).toLocaleDateString()}
                   </span>
                   {comment.isEdited && (
-                    <span className="text-xs text-gray-500">(edited)</span>
+                    <span className="text-xs text-gray-500">
+                      (đã chỉnh sửa)
+                    </span>
                   )}
-                  {(currentUser?.id === comment.userId || isAdmin) &&
-                    !editingId && (
-                      <div className="flex items-center gap-2 mt-1 ml-4">
-                        <Tooltip title="Edit">
-                          <IconButton
-                            size="small"
-                            onClick={() => {
-                              setEditingId(comment.id);
-                              setEditContent(comment.content);
-                            }}
-                            className="text-gray-500 hover:text-gray-700"
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Delete">
-                          <IconButton
-                            size="small"
-                            onClick={() => handleDelete(comment.id)}
-                            className="text-gray-500 hover:text-red-600"
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                      </div>
-                    )}
+                  {currentUser?.id === comment.userId && !editingId && (
+                    <div className="flex items-center gap-2 mt-1 ml-4">
+                      <Tooltip title="Chỉnh sửa">
+                        <IconButton
+                          size="small"
+                          onClick={() => {
+                            setEditingId(comment.id);
+                            setEditContent(comment.content);
+                          }}
+                          className="text-gray-500 hover:text-gray-700"
+                        >
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Xóa">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDelete(comment.id)}
+                          className="text-gray-500 hover:text-red-600"
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
+                  )}
                 </div>
 
                 {editingId === comment.id ? (
@@ -214,13 +211,13 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
                         onClick={() => setEditingId(null)}
                         className="text-xs text-gray-500 hover:text-gray-700 px-2 py-1"
                       >
-                        Cancel
+                        Hủy
                       </button>
                       <button
                         onClick={() => handleEdit(comment.id)}
                         className="text-xs text-white bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded-lg"
                       >
-                        Save
+                        Lưu
                       </button>
                     </div>
                   </div>

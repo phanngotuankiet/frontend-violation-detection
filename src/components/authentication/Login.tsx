@@ -23,7 +23,8 @@ const Login = () => {
 
     try {
       const response = await authService.login(formData);
-      if (response.access_token) {
+
+      if (response?.access_token) {
         const roleUser = response.user.role;
         if (roleUser === "user") {
           setAccessToken(response.access_token);

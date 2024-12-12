@@ -1,6 +1,6 @@
 // src/components/Question/QuestionDetail.tsx
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Container } from "@mui/material";
 import { useAuth } from "../../../context/AuthContext";
 import { questionApi, answerApi } from "../../../../api/forum.service";
@@ -9,6 +9,7 @@ import AddAnswer from "../Answer/AddAnswer";
 import Answer from "@/constant/Answer";
 import Navbar from "../../dashboard/Navbar";
 import { TrashIcon } from "@heroicons/react/20/solid";
+import { ArrowLeft } from "@mui/icons-material";
 
 interface QuestionDetail {
   id: number;
@@ -29,6 +30,7 @@ const QuestionDetail = () => {
   const [question, setQuestion] = useState<QuestionDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const isAdmin = currentUser?.role === "admin";
+  const navigate = useNavigate();
   useEffect(() => {
     fetchQuestionDetail();
   }, [id]);
@@ -38,7 +40,7 @@ const QuestionDetail = () => {
       const { data } = await questionApi.getById(Number(id));
       setQuestion(data);
     } catch (error) {
-      console.error("Failed to fetch question:", error);
+      console.error("không thể tải câu hỏi:", error);
     } finally {
       setLoading(false);
     }
@@ -49,7 +51,7 @@ const QuestionDetail = () => {
       await answerApi.accept(answerId);
       fetchQuestionDetail();
     } catch (error) {
-      console.error("Failed to accept answer:", error);
+      console.error("không thể chấp nhận câu trả lời:", error);
     }
   };
 
@@ -58,7 +60,7 @@ const QuestionDetail = () => {
       await answerApi.update(answerId, { content });
       fetchQuestionDetail();
     } catch (error) {
-      console.error("Failed to update answer:", error);
+      console.error("không thể cập nhật câu trả lời:", error);
     }
   };
 
@@ -67,39 +69,42 @@ const QuestionDetail = () => {
       await answerApi.delete(answerId);
       fetchQuestionDetail();
     } catch (error) {
-      console.error("Failed to delete answer:", error);
+      console.error("không thể xóa câu trả lời:", error);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (!question) return <div>Question not found</div>;
+  if (loading) return <div>Đang tải...</div>;
+  if (!question) return <div>Không tìm thấy câu hỏi</div>;
 
   return (
     <>
       <Navbar />
       <Container maxWidth="lg" className="mt-10">
+        <div className="relative flex justify-start">
+          <button
+            onClick={() => navigate("/forum")}
+            className="mb-6 p-2 rounded-full bg-white border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm hover:shadow-md"
+            aria-label="Quay lại"
+          >
+            <ArrowLeft className="w-6 h-6 text-gray-600" />
+          </button>
+        </div>
+
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
           <div className="p-6">
-            <div className="flex justify-between items-start mb-4">
-              <h1 className="text-2xl font-semibold text-gray-900">
-                {question.title}
-              </h1>
-              {isAdmin && (
-                <button
-                  onClick={() => handleAnswerDelete(question.id)}
-                  className="text-red-600 hover:text-red-800"
-                >
-                  <TrashIcon className="h-5 w-5" />
-                </button>
-              )}
-            </div>
+            {/* tiêu đề */}
+            <h1 className="text-2xl font-semibold text-gray-900 mb-4 text-left">
+              {question.title}
+            </h1>
 
-            <div className="prose max-w-none mb-6">
+            {/* nội dung */}
+            <div className="prose max-w-none mb-6 text-left">
               <p className="text-gray-700 leading-relaxed">
                 {question.content}
               </p>
             </div>
 
+            {/* thông tin chi tiết */}
             <div className="flex items-center justify-between pt-4 border-t border-gray-200">
               <div className="flex items-center space-x-4">
                 <div className="flex-shrink-0">
@@ -109,8 +114,8 @@ const QuestionDetail = () => {
                     </span>
                   </div>
                 </div>
-                <div className="text-sm flex items-center gap-2">
-                  <p className="text-gray-900 font-medium flex items-center gap-1">
+                <div className="text-sm">
+                  <p className="text-gray-900 font-medium text-left">
                     {question.user.name}
                     {question.user.role === "admin" && (
                       <svg
@@ -128,7 +133,8 @@ const QuestionDetail = () => {
                     )}
                   </p>
                   <p className="text-gray-500">
-                    Asked on {new Date(question.createdAt).toLocaleDateString()}
+                    Đã hỏi vào{" "}
+                    {new Date(question.createdAt).toLocaleDateString()}
                   </p>
                 </div>
               </div>
@@ -137,9 +143,12 @@ const QuestionDetail = () => {
         </div>
 
         <div className="max-w-4xl mx-auto">
+          {/* phần câu trả lời */}
           <div className="mt-8">
             <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Answers</h2>
+              <h2 className="text-xl font-semibold text-gray-900">
+                Câu trả lời
+              </h2>
               <span className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded-full">
                 {question.answers.length}
               </span>
@@ -160,13 +169,14 @@ const QuestionDetail = () => {
             </div>
           </div>
 
+          {/* phần trả lời của bạn */}
           <div className="mt-12 border-t border-gray-200 pt-8">
             <div className="mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">
-                Your Answer
+              <h2 className="text-xl font-semibold text-gray-900 text-left">
+                Câu trả lời của bạn
               </h2>
-              <p className="mt-1 text-sm text-gray-500">
-                Share your knowledge with the community
+              <p className="mt-1 text-sm text-gray-500 text-left">
+                Chia sẻ kiến thức của bạn với cộng đồng
               </p>
             </div>
 

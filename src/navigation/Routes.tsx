@@ -9,6 +9,7 @@ import QuestionList from "../components/forum/Question/QuestionList";
 import QuestionDetail from "../components/forum/Question/QuestionDetail";
 import SearchMonitoringDashboard from "../components/admin/components/SearchMonitoringDashboard";
 import SearchStats from "@/components/admin/components/SearchStats";
+import Dashboard from "../components/dashboard/Dashboard";
 
 interface Route {
   path: string;
@@ -16,26 +17,31 @@ interface Route {
   protected: boolean;
 }
 
-export const routes: Route[] = [
+export const LoggedInRoutes: Route[] = [
   { path: "/", Component: Evaluate, protected: false },
-  { path: "/evaluate", Component: Evaluate, protected: false },
-  { path: "/login", Component: Login, protected: false },
-  { path: "/signup", Component: SignUp, protected: false },
   { path: "/processedVideos", Component: ProcessedVideos, protected: false },
   { path: "/profile", Component: Profile, protected: false },
+  { path: "/evaluate", Component: Evaluate, protected: false },
   { path: "/superAdmin", Component: SuperAdmin, protected: true },
   {
     path: "/superAdmin/monitoring",
     Component: SearchMonitoringDashboard,
     protected: true,
   },
-  {
-    path: "/superAdmin/questions/:id",
-    Component: QuestionDetail,
-    protected: true,
-  },
+  // {
+  //   path: "/superAdmin/questions/:id",
+  //   Component: QuestionDetail,
+  //   protected: true,
+  // },
   // { path: "/superAdmin/stats", Component: SearchStats, protected: true },
 
   { path: "/forum", Component: QuestionList, protected: false },
   { path: "questions/:id", Component: QuestionDetail, protected: false },
+  { path: "*", Component: Evaluate, protected: false },
+];
+
+export const LoggedOutRoutes: Route[] = [
+  { path: "/login", Component: Login, protected: false },
+  { path: "/signup", Component: SignUp, protected: false },
+  { path: "/", Component: Dashboard, protected: false },
 ];

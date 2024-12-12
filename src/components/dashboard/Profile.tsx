@@ -6,11 +6,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import Navbar from "./Navbar";
 import { userService } from "../../../api/user.service";
-import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
 const Profile = () => {
-  const { email } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
