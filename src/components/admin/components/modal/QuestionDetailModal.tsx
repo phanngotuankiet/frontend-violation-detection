@@ -23,7 +23,7 @@ import {
 //   CommentForForum,
 // } from "@/constant/Forum";
 import Answer from "@/constant/Answer";
-import { answerApi, questionApi } from "../../../../../api/forum.service";
+import { questionApi } from "../../../../../api/forum.service";
 import AddAnswer from "../../../../components/forum/Answer/AddAnswer";
 import CommentList from "../../../../components/forum/Comment/CommentList";
 import { useAuth } from "../../../../context/AuthContext";

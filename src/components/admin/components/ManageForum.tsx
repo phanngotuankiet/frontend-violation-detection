@@ -6,22 +6,24 @@ import {
   Typography,
   CircularProgress,
   Avatar,
+  IconButton,
 } from "@mui/material";
+import { Delete as DeleteIcon } from "@mui/icons-material";
 import { adminService } from "../../../../api/admin.service";
 import QuestionDetailModal from "./modal/QuestionDetailModal";
-import { answerApi } from "../../../../api/forum.service";
-import { commentApi } from "../../../../api/forum.service";
+// import { answerApi } from "../../../../api/forum.service";
+// import { commentApi } from "../../../../api/forum.service";
 import Question from "@/constant/Question";
-// import Answer from "@/constant/Answer";
+// // import Answer from "@/constant/Answer";
+// // import Comment from "@/constant/Comment";
+// import {
+//   QuestionForForum,
+//   AnswerForForum,
+//   CommentForForum,
+//   UserForForum,
+// } from "@/constant/Forum";
+// import User from "@/constant/User";
 // import Comment from "@/constant/Comment";
-import {
-  QuestionForForum,
-  AnswerForForum,
-  CommentForForum,
-  UserForForum,
-} from "@/constant/Forum";
-import User from "@/constant/User";
-import Comment from "@/constant/Comment";
 
 // interface QuestionDetail {
 //   id: number;
@@ -76,53 +78,53 @@ const ManageForum: React.FC = () => {
     }
   };
 
-  const handleDeleteAnswer = async (questionId: number, answerId: number) => {
-    try {
-      await adminService.deleteAnswer(answerId);
-      fetchQuestions();
-    } catch (error) {
-      console.error("Error deleting answer:", error);
-    }
-  };
+  // const handleDeleteAnswer = async (questionId: number, answerId: number) => {
+  //   try {
+  //     await adminService.deleteAnswer(answerId);
+  //     fetchQuestions();
+  //   } catch (error) {
+  //     console.error("Error deleting answer:", error);
+  //   }
+  // };
 
-  const handleAcceptAnswer = async (answerId: number) => {
-    try {
-      await adminService.toggleAnswerAcceptance(answerId);
-      fetchQuestions();
-    } catch (error) {
-      console.error("Error accepting answer:", error);
-    }
-  };
+  // const handleAcceptAnswer = async (answerId: number) => {
+  //   try {
+  //     await adminService.toggleAnswerAcceptance(answerId);
+  //     fetchQuestions();
+  //   } catch (error) {
+  //     console.error("Error accepting answer:", error);
+  //   }
+  // };
 
-  const handleDeleteComment = async (commentId: number) => {
-    try {
-      await adminService.deleteComment(commentId);
-      fetchQuestions();
-    } catch (error) {
-      console.error("Error deleting comment:", error);
-    }
-  };
+  // const handleDeleteComment = async (commentId: number) => {
+  //   try {
+  //     await adminService.deleteComment(commentId);
+  //     fetchQuestions();
+  //   } catch (error) {
+  //     console.error("Error deleting comment:", error);
+  //   }
+  // };
 
-  const handleAddAnswer = async (questionId: number, content: string) => {
-    if (!content.trim()) return;
+  // const handleAddAnswer = async (questionId: number, content: string) => {
+  //   if (!content.trim()) return;
 
-    try {
-      await answerApi.create({ content, questionId });
-      fetchQuestions();
-    } catch (error) {
-      console.error("Error adding answer:", error);
-    }
-  };
-  const handleAddComment = async (answerId: number, content: string) => {
-    if (!content.trim()) return;
+  //   try {
+  //     await answerApi.create({ content, questionId });
+  //     fetchQuestions();
+  //   } catch (error) {
+  //     console.error("Error adding answer:", error);
+  //   }
+  // };
+  // const handleAddComment = async (answerId: number, content: string) => {
+  //   if (!content.trim()) return;
 
-    try {
-      await commentApi.create({ content, answerId });
-      fetchQuestions();
-    } catch (error) {
-      console.error("Error adding comment:", error);
-    }
-  };
+  //   try {
+  //     await commentApi.create({ content, answerId });
+  //     fetchQuestions();
+  //   } catch (error) {
+  //     console.error("Error adding comment:", error);
+  //   }
+  // };
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" p={4}>
@@ -245,6 +247,21 @@ const ManageForum: React.FC = () => {
                     answers
                   </Typography>
                 </Box>
+                <Typography
+                  component="span"
+                  sx={{
+                    ml: 0.5,
+                    color: "text.secondary",
+                  }}
+                >
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => handleDeleteQuestion(question.id)}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Typography>
               </Box>
             </Box>
           </Paper>
