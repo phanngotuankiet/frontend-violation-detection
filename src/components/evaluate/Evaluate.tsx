@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../dashboard/Navbar";
 import VideoAnalysisResult from "../analysis/VideoAnalysisResult";
+import { useIztro } from "./iztroHooks/useIztro";
+
+import { astro } from "iztro";
+import { IztrolabeNaikyo, IztrolabeProps } from "./Iztrolabe";
+import { FormInputIztro } from "./FormInputIztro";
 
 interface AnalysisResult {
   confidences: {
@@ -19,6 +24,26 @@ const Evaluate = () => {
   );
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const [formData, setFormData] = useState<IztrolabeProps | null>(null);
+
+  const { astrolabe, horoscope, setHoroscope } = useIztro({
+    birthday: "2001-12-9",
+    birthTime: 11,
+    gender: "male",
+    birthdayType: "solar",
+    fixLeap: true,
+    isLeapMonth: true,
+    lang: "vi",
+    options: {},
+  });
+
+  console.log("horoscope", horoscope);
+  useEffect(() => {
+    const astrolabe = astro.bySolar("2001-12-9", 11, "男", true, "vi-VN");
+
+    console.log("astrolabe", astrolabe);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,7 +117,24 @@ const Evaluate = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <div className="flex justify-center items-center w-[70%] mx-auto">
+        {formData && (
+          <IztrolabeNaikyo
+            birthday={formData?.birthday ?? ""}
+            birthTime={formData?.birthTime ?? 11}
+            gender={formData?.gender ?? "male"}
+            birthdayType={formData?.birthdayType ?? "solar"}
+            fixLeap={true}
+            isLeapMonth={true}
+            lang="vi"
+            options={{}}
+          />
+        )}
+      </div>
+      <FormInputIztro onSubmit={setFormData} />
+
       <Navbar />
+
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-2 text-gray-800 text-center">
