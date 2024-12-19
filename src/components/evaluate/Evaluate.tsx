@@ -1,7 +1,11 @@
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import Navbar from "../dashboard/Navbar";
 import VideoAnalysisResult from "../analysis/VideoAnalysisResult";
+// import { VideoUploadPayload } from "@/constant/Video";
+import { VideoUploadPayload, videoService } from "../../../api/video.service";
+import axios from "axios";
+import { log } from "console";
 
 interface AnalysisResult {
   confidences: {
@@ -12,6 +16,8 @@ interface AnalysisResult {
 
 const Evaluate = () => {
   const [file, setFile] = useState<File | null>(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [progress, setProgress] = useState(0);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
@@ -26,34 +32,50 @@ const Evaluate = () => {
 
     const formData = new FormData();
     formData.append("video", file);
+    console.log(file);
 
     try {
       setIsProcessing(true);
-      const uploadResponse = await axios.post(
-        "http://localhost:8000/api/v1/videos/process",
-        formData,
+      // const uploadResponse = await axios.post(
+      //   "http://localhost:8000/api/v1/videos/process",
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //     onUploadProgress: (progressEvent) => {
+      //       if (progressEvent.total) {
+      //         const percentCompleted = Math.round(
+      //           (progressEvent.loaded * 100) / progressEvent.total
+      //         );
+      //         setProgress(percentCompleted);
+      //       }
+      //     },
+      //   }
+      // );
+
+      // if (uploadResponse.status === 200) {
+      //   const { data } = uploadResponse.data;
+      //   setAnalysisResult({
+      //     confidences: data.confidences,
+      //     detected_crimes: data.detected_crimes,
+      //   });
+      // }
+      const response = await videoService.uploadVideo(
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            if (progressEvent.total) {
-              const percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / progressEvent.total
-              );
-              setProgress(percentCompleted);
-            }
-          },
+          title,
+          description,
+          file,
+        },
+        (progress) => {
+          setProgress(progress);
         }
       );
-
-      if (uploadResponse.status === 200) {
-        const { data } = uploadResponse.data;
-        setAnalysisResult({
-          confidences: data.confidences,
-          detected_crimes: data.detected_crimes,
-        });
-      }
+      console.log(response);
+      setAnalysisResult({
+        confidences: response?.analysis.confidences,
+        detected_crimes: response?.analysis.detected_crimes,
+      });
     } catch (err) {
       console.error("Error:", err);
       alert("Lỗi khi xử lý video");
@@ -115,6 +137,28 @@ const Evaluate = () => {
             >
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="text-center">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Title
+                    </label>
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Description
+                    </label>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
+                    />
+                  </div>
                   <svg
                     className="mx-auto h-12 w-12 text-gray-400"
                     fill="none"
