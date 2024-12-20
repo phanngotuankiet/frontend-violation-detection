@@ -28,7 +28,7 @@ export interface AnswerForForum {
   createdAt: string;
   updatedAt: string;
   user: UserForForum;
-  comments: Comment[];
+  comments: CommentForForum[];
 }
 
 export interface QuestionForForum {

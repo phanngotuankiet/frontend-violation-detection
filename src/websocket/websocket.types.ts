@@ -8,3 +8,9 @@ export interface SensitiveSearchNotification {
   userId?: number;
   status?: SearchStatus;
 }
+
+export interface QAEvent {
+  type: "question" | "answer" | "comment";
+  action: "create" | "update" | "delete";
+  data: any;
+}

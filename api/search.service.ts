@@ -20,56 +20,6 @@ axiosInstance.interceptors.request.use((config) => {
   }
   return config;
 });
-// // WebSocket connection handler
-// export class WebSocketService {
-//   private socket: WebSocket | null = null;
-//   private reconnectAttempts = 0;
-//   private maxReconnectAttempts = 5;
-
-//   connect() {
-//     try {
-//       this.socket = new WebSocket(WS_URL);
-
-//       this.socket.onopen = () => {
-//         console.log("WebSocket Connected");
-//         this.reconnectAttempts = 0;
-
-//         // Send authentication
-//         const token = localStorage.getItem("access_token");
-//         if (token && this.socket) {
-//           this.socket.send(JSON.stringify({ type: "auth", token }));
-//         }
-//       };
-
-//       this.socket.onclose = () => {
-//         if (this.reconnectAttempts < this.maxReconnectAttempts) {
-//           setTimeout(() => {
-//             this.reconnectAttempts++;
-//             this.connect();
-//           }, 2000 * Math.pow(2, this.reconnectAttempts));
-//         }
-//       };
-//     } catch (error) {
-//       console.error("WebSocket connection failed:", error);
-//     }
-//   }
-
-//   subscribe(callback: (data: any) => void) {
-//     if (this.socket) {
-//       this.socket.onmessage = (event) => {
-//         const data = JSON.parse(event.data);
-//         callback(data);
-//       };
-//     }
-//   }
-
-//   disconnect() {
-//     if (this.socket) {
-//       this.socket.close();
-//       this.socket = null;
-//     }
-//   }
-// }
 
 export interface SearchResult {
   isSensitive: boolean;
@@ -95,9 +45,15 @@ export const searchService = {
     });
     return response.data;
   },
-  getSensitiveSearches: async () => {
-    const response = await axiosInstance.get("/search/sensitive");
+  // getSensitiveSearches: async () => {
+  //   const response = await axiosInstance.get("/search/sensitive");
 
+  //   return response.data;
+  // },
+  getSensitiveSearches: async (page: number = 1, limit: number = 10) => {
+    const response = await axiosInstance.get(
+      `/search/sensitive?page=${page}&limit=${limit}`
+    );
     return response.data;
   },
   updateSearchStatus: async (id: number, status: SearchStatus) => {

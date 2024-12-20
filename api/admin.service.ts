@@ -1,3 +1,4 @@
+import Question from "@/constant/Question";
 import axios from "axios";
 
 const API_URL = "http://localhost:3000";
@@ -19,9 +20,28 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 export const adminService = {
-  getAllQuestions: async () => {
-    const response = await axiosInstance.get("/admin/questions");
+  getAllUsers: async (page: number = 1, limit: number = 10) => {
+    const response = await axiosInstance.get(
+      `/admin/users?page=${page}&limit=${limit}`
+    );
     return response.data;
+  },
+  // getAllQuestions: async () => {
+  //   const response = await axiosInstance.get("/admin/questions");
+  //   return response.data;
+  // },
+  getAllQuestions: async (page: number = 1, limit: number = 10) => {
+    const response = await axiosInstance.get(
+      `/admin/questions?page=${page}&limit=${limit}`
+    );
+    return {
+      data: response.data.data,
+      meta: {
+        total: response.data.meta.total,
+        page: response.data.meta.page,
+        lastPage: response.data.meta.lastPage,
+      },
+    };
   },
   deleteQuestion: async (id: number) => {
     const response = await axiosInstance.delete(`/admin/questions/${id}`);

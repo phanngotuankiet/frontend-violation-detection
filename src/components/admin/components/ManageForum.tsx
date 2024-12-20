@@ -5,28 +5,35 @@ import QuestionDetailModal from "./modal/QuestionDetailModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../dashboard/Navbar";
+import Pagination from "../../pagination/Pagination";
 
 const ManageForum: React.FC = () => {
   const [questions, setQuestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
-  useEffect(() => {
-    fetchQuestions();
-  }, []);
 
-  const fetchQuestions = async () => {
+  const fetchQuestions = async (page: number = 1) => {
     try {
       setLoading(true);
-      const data = await adminService.getAllQuestions();
-      setQuestions(data);
+      const data = await adminService.getAllQuestions(page);
+      console.log(data);
+
+      setQuestions(data.data);
+      setTotalPages(data.meta.lastPage);
     } catch (error) {
       console.error("Error fetching questions:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    fetchQuestions(currentPage);
+  }, [currentPage]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDeleteQuestion = async (id: number) => {
     try {
       await adminService.deleteQuestion(id);
@@ -45,77 +52,97 @@ const ManageForum: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-screen mx-auto p-6 bg-gradient-to-r from-blue-50 to-indigo-100">
-      <div className="flex justify-center items-center text-center mb-8 space-x-4">
-        <FontAwesomeIcon
-          icon={faArrowLeft}
-          size="2xl"
-          onClick={() => {
-            navigate("/superAdmin");
-          }}
-          className="cursor-pointer"
-        />
-        <h1 className="text-4xl font-extrabold text-center text-gray-900">
-          Forum Management
-        </h1>
-      </div>
+    <div className="min-h-screen bg-gray-100">
+      <Navbar isAdmin={true} />
 
-      <div className="space-y-6 w-full flex flex-col justify-center items-center ">
-        {questions.map((question) => (
-          <div
-            key={question.id}
-            className=" bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 cursor-pointer py-6 w-3/4"
-            onClick={() => setSelectedQuestion(question.id)}
-          >
-            {/* Title */}
-            <h2 className="text-2xl font-semibold mb-4 text-gray-800 hover:text-primary transition-colors duration-300">
-              {question.title}
-            </h2>
-
-            {/* Metadata and User Info */}
-            <div className="flex items-center justify-between  text-gray-500 text-xl">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary text-white flex justify-center items-center rounded-full font-medium">
-                  {question.user.name.charAt(0)}
-                </div>
-                <span>{question.user.name}</span>
-                <span>●</span>
-                <span>{new Date(question.createdAt).toLocaleDateString()}</span>
-              </div>
-
-              {/* Right-aligned answer count and delete button */}
-              <div className="flex items-center space-x-4 mr-4">
-                <span className="bg-gray-200 px-2 py-1 rounded-md text-primary">
-                  {question.answers.length} answers
-                </span>
-                <button
-                  className="text-red-600 hover:text-red-800"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDeleteQuestion(question.id);
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-5 h-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
+      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-start">
+            {/* <button
+              onClick={() => navigate(-1)}
+              className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
+              <span>Back</span>
+            </button> */}
+            <h1 className="text-2xl font-bold text-gray-900">
+              Quản lí diễn đàn
+            </h1>
           </div>
-        ))}
-      </div>
+        </div>
 
+        {/* Main Content */}
+        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      No.
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Title
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Author
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {questions.map((question, index) => (
+                    <tr
+                      key={question.id}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {index + 1}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-medium text-gray-900 line-clamp-1">
+                          {question.title}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center justify-center">
+                          <div className="text-sm font-medium text-gray-900">
+                            {question.user.name}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button
+                          onClick={() => setSelectedQuestion(question.id)}
+                          className="text-indigo-600 hover:text-indigo-900 font-medium"
+                        >
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+        {/* Pagination */}
+        <div className="px-6 py-4 border-t border-gray-200">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      </div>
+      {/* Modal */}
       <QuestionDetailModal
         open={!!selectedQuestion}
         onClose={() => setSelectedQuestion(null)}

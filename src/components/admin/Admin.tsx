@@ -8,19 +8,27 @@ import User from "../../constant/User";
 import OnDeleteModal from "./components/modal/OnDeleteModal";
 import OnLogoutModal from "./components/modal/OnLogoutModal";
 import Navbar from "../dashboard/Navbar";
+import { adminService } from "../../../api/admin.service";
 const SuperAdmin: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<User | null>(null);
   const [idToDelete, setIdToDelete] = useState<number | null>(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 10;
 
   const backend = import.meta.env.VITE_BACKEND_URL;
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (page: number = 1) => {
     try {
-      const response = await axios.get(`${backend}/admin/users`);
+      setIsLoading(true);
+      const response = await adminService.getAllUsers(page, itemsPerPage);
       setUsers(response.data);
+      setTotalPages(response.meta.totalPages);
+      setCurrentPage(page);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách người dùng:", error);
       toast.error("Không thể tải danh sách người dùng");
@@ -28,8 +36,8 @@ const SuperAdmin: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers(currentPage);
+  }, [currentPage]);
 
   const handleDeleteUser = async (id: number) => {
     if (!id || isNaN(id)) {
@@ -59,64 +67,95 @@ const SuperAdmin: React.FC = () => {
   const handleAddUser = (newUser: User) => {
     setUsers((prevUsers) => [...prevUsers, newUser]);
   };
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
 
   return (
-    <div className="h-full w-full bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       <Navbar isAdmin={true} />
-      {/* Header */}
 
-      {/* //Body */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 py-8 px-5 mt-4">
-        <h1 className="text-3xl font-semibold text-center text-black mb-8">
-          Super Admin Dashboard
-        </h1>
+      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-8 sm:flex sm:items-center sm:justify-between">
+          <div className="mb-4 sm:mb-0">
+            <h1 className="text-2xl font-bold text-gray-900">
+              User Management
+            </h1>
+            <p className="mt-1 text-sm text-gray-500">
+              Manage system users and their permissions
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setIsAddUserModalOpen(true)}
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Add New User
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+          <ListUser
+            users={users}
+            onEditUser={handleEditUser}
+            onDeleteUser={handleDeleteUser}
+            setIdToDelete={setIdToDelete}
+            setIsAddUserModalOpen={setIsAddUserModalOpen}
+            isLoading={isLoading}
+            pagination={{
+              currentPage,
+              totalPages,
+              onPageChange: handlePageChange,
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Modals */}
+      {isAddUserModalOpen && (
         <AddUser
           onAddUser={handleAddUser}
           onClose={() => setIsAddUserModalOpen(false)}
           isOpen={isAddUserModalOpen}
         />
+      )}
 
-        {editUser && (
-          <UpdateUser
-            user={editUser}
-            onUpdateUser={(updatedUser) => {
-              setUsers(
-                users.map((user) =>
-                  user.id === updatedUser.id ? updatedUser : user
-                )
-              );
-              setEditUser(null);
-            }}
-            onCancel={() => setEditUser(null)}
-          />
-        )}
-
-        <ListUser
-          users={users}
-          onEditUser={handleEditUser}
-          onDeleteUser={handleDeleteUser}
-          setIdToDelete={setIdToDelete}
-          setIsAddUserModalOpen={setIsAddUserModalOpen}
-        />
-
-        <OnDeleteModal
-          isOpen={idToDelete !== null}
-          onClose={() => setIdToDelete(null)}
-          onConfirm={() => {
-            if (idToDelete !== null) {
-              handleDeleteUser(idToDelete);
-              setIdToDelete(null);
-            }
+      {editUser && (
+        <UpdateUser
+          user={editUser}
+          onUpdateUser={(updatedUser) => {
+            setUsers(
+              users.map((user) =>
+                user.id === updatedUser.id ? updatedUser : user
+              )
+            );
+            setEditUser(null);
           }}
-          userName={users.find((user) => user.id === idToDelete)?.name || ""}
+          onCancel={() => setEditUser(null)}
         />
+      )}
 
-        <OnLogoutModal
-          isOpen={isLogoutModalOpen}
-          onClose={() => setIsLogoutModalOpen(false)}
-          onConfirm={handleLogout}
-        />
-      </div>
+      <OnDeleteModal
+        isOpen={idToDelete !== null}
+        onClose={() => setIdToDelete(null)}
+        onConfirm={() => {
+          if (idToDelete !== null) {
+            handleDeleteUser(idToDelete);
+            setIdToDelete(null);
+          }
+        }}
+        userName={users.find((user) => user.id === idToDelete)?.name || ""}
+      />
+
+      <OnLogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogout}
+      />
     </div>
   );
 };

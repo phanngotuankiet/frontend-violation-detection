@@ -80,17 +80,21 @@ const SearchBar: React.FC = () => {
       }
 
       const result = await searchService.searchVideos(searchTerm);
-      const formattedVideos = (result.videos || []).map((video: Partial<Video>) => ({
-        id: video.id!,
-        title: video.title || "",
-        description: video.description || "",
-        thumbnailUrl: video.thumbnailUrl || "",
-        url: video.url || "",
-        createdAt: video.createdAt || new Date().toISOString(),
-      }));
+      const formattedVideos = (result.videos || []).map(
+        (video: Partial<Video>) => ({
+          id: video.id!,
+          title: video.title || "",
+          description: video.description || "",
+          thumbnailUrl: video.thumbnailUrl || "",
+          url: video.url || "",
+          createdAt: video.createdAt || new Date().toISOString(),
+        })
+      );
 
       setVideos(formattedVideos);
-      setSearchHistory(prev => [...new Set([searchTerm, ...prev])].slice(0, 5));
+      setSearchHistory((prev) =>
+        [...new Set([searchTerm, ...prev])].slice(0, 5)
+      );
     } catch (error) {
       setError(error instanceof Error ? error.message : "Đã xảy ra lỗi");
     } finally {
@@ -100,14 +104,14 @@ const SearchBar: React.FC = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4">
-      <Paper 
+      <Paper
         elevation={3}
         className="relative"
         sx={{
           p: 2,
-          borderRadius: '16px',
-          background: 'rgba(255, 255, 255, 0.9)',
-          backdropFilter: 'blur(10px)',
+          borderRadius: "16px",
+          background: "rgba(255, 255, 255, 0.9)",
+          backdropFilter: "blur(10px)",
         }}
       >
         <form onSubmit={handleSubmit} className="flex items-center gap-2">
@@ -139,12 +143,16 @@ const SearchBar: React.FC = () => {
             </IconButton>
           </Tooltip>
 
-          <IconButton 
-            type="submit" 
+          <IconButton
+            type="submit"
             disabled={loading}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : <SearchIcon />}
+            {loading ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              <SearchIcon />
+            )}
           </IconButton>
         </form>
 

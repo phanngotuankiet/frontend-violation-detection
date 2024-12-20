@@ -1,5 +1,5 @@
 // src/components/Question/QuestionDetail.tsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container } from "@mui/material";
 import { useAuth } from "../../../context/AuthContext";
@@ -7,11 +7,17 @@ import { questionApi, answerApi } from "../../../../api/forum.service";
 import AnswerList from "../Answer/AnswerList";
 import AddAnswer from "../Answer/AddAnswer";
 import Answer from "@/constant/Answer";
+
 import Navbar from "../../dashboard/Navbar";
 import { ArrowLeft } from "@mui/icons-material";
+import { useSocket } from "../../../hooks/useSocket";
+import { QAEvent } from "../../../websocket/websocket.types";
+// import { QuestionForForum } from "../../../constant/Forum";
+// import QuestionForm from "./QuestionForm";
 
 interface QuestionDetail {
   id: number;
+  questionId: number;
   title: string;
   content: string;
   user: {
@@ -27,6 +33,8 @@ const QuestionDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user: currentUser } = useAuth();
   const [question, setQuestion] = useState<QuestionDetail | null>(null);
+
+  const [answers, setAnswers] = useState([] as any);
   const [loading, setLoading] = useState(true);
   const isAdmin = currentUser?.role === "admin";
   const navigate = useNavigate();
@@ -36,14 +44,56 @@ const QuestionDetail = () => {
 
   const fetchQuestionDetail = async () => {
     try {
-      const { data } = await questionApi.getById(Number(id));
-      setQuestion(data);
+      const data = await questionApi.getById(Number(id));
+      setQuestion(data.data);
+      setAnswers(data.data.answers);
+      console.log(data);
     } catch (error) {
       console.error("không thể tải câu hỏi:", error);
     } finally {
       setLoading(false);
     }
   };
+  const handleQAEvent = useCallback(
+    (event: QAEvent) => {
+      if (!question) return;
+
+      switch (event.type) {
+        case "answer":
+          if (event.data.questionId === question.id) {
+            switch (event.action) {
+              case "create":
+                console.log("New answer:", event.data);
+                setQuestion((prev) => ({
+                  ...prev!,
+                  answers: [...prev!.answers, event.data],
+                }));
+                break;
+              case "update":
+                console.log("Updated answer:", event.data);
+                setQuestion((prev) => ({
+                  ...prev!,
+                  answers: prev!.answers.map((a) =>
+                    a.id === event.data.id ? event.data : a
+                  ),
+                }));
+                break;
+              case "delete":
+                console.log("Deleted answer:", event.data);
+                setQuestion((prev) => ({
+                  ...prev!,
+                  answers: prev!.answers.filter((a) => a.id !== event.data.id),
+                }));
+                break;
+            }
+          }
+          break;
+      }
+    },
+    [question]
+  );
+
+  useSocket(handleQAEvent);
 
   const handleAnswerAccept = async (answerId: number) => {
     try {

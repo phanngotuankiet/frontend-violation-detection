@@ -25,6 +25,7 @@ axiosInstance.interceptors.request.use((config) => {
 export const questionApi = {
   // Lấy tất cả câu hỏi
   getAll: () => axiosInstance.get<Question[]>("/questions"),
+
   // Lấy câu hỏi bằng id
   getById: (id: number) => axiosInstance.get<Question>(`/questions/${id}`),
   // Tạo câu hỏi

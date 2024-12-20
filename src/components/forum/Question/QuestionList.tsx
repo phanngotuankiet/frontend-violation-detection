@@ -1,5 +1,5 @@
 // src/components/Question/QuestionList.tsx
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -27,6 +27,8 @@ import styles from "./QuestionList.module.css";
 import Navbar from "../../dashboard/Navbar";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../context/AuthContext";
+import { useSocket } from "../../../hooks/useSocket";
+import { QAEvent } from "../../../websocket/websocket.types";
 
 export const QuestionList: React.FC = () => {
   const { user: currentUser } = useAuth();
@@ -38,6 +40,26 @@ export const QuestionList: React.FC = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState<number | null>(null);
   const [tabValue, setTabValue] = useState(0);
+
+  const handleQAEvent = useCallback((event: QAEvent) => {
+    if (event.type === "question") {
+      switch (event.action) {
+        case "create":
+          setQuestions((prev) => [event.data, ...prev]);
+          break;
+        case "update":
+          setQuestions((prev) =>
+            prev.map((q) => (q.id === event.data.id ? event.data : q))
+          );
+          break;
+        case "delete":
+          setQuestions((prev) => prev.filter((q) => q.id !== event.data.id));
+          break;
+      }
+    }
+  }, []);
+
+  useSocket(handleQAEvent);
 
   useEffect(() => {
     fetchQuestions();
@@ -185,7 +207,7 @@ export const QuestionList: React.FC = () => {
                       "&:hover": {
                         color: "primary.dark",
                       },
-                      textAlign: "left"
+                      textAlign: "left",
                     }}
                   >
                     {question.title}
@@ -201,7 +223,7 @@ export const QuestionList: React.FC = () => {
                     overflow: "hidden",
                     WebkitBoxOrient: "vertical",
                     WebkitLineClamp: 3,
-                    textAlign: "left"
+                    textAlign: "left",
                   }}
                 >
                   {question.content}
@@ -253,7 +275,8 @@ export const QuestionList: React.FC = () => {
                           color: "#2563eb",
                           "&:hover": {
                             borderColor: "#1d4ed8",
-                            background: "linear-gradient(to right, #2563eb, #4f46e5)",
+                            background:
+                              "linear-gradient(to right, #2563eb, #4f46e5)",
                             color: "white",
                           },
                         }}
@@ -307,7 +330,8 @@ export const QuestionList: React.FC = () => {
         <Dialog open={deleteModalOpen} onClose={handleCancelDelete}>
           <DialogTitle>Xóa Câu Hỏi</DialogTitle>
           <DialogContent>
-            Bạn có chắc chắn muốn xóa câu hỏi này? Hành động này không thể hoàn tác.
+            Bạn có chắc chắn muốn xóa câu hỏi này? Hành động này không thể hoàn
+            tác.
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCancelDelete} color="primary">

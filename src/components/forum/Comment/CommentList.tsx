@@ -1,5 +1,5 @@
 // src/components/Comment/CommentList.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { TextField, IconButton, Tooltip } from "@mui/material";
 // import ReplyIcon from "@mui/icons-material/Reply";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
@@ -7,6 +7,8 @@ import { useAuth } from "../../../context/AuthContext";
 import { commentApi } from "../../../../api/forum.service";
 import Comment from "@/constant/Comment";
 import { adminService } from "../../../../api/admin.service";
+import { useSocket } from "../../../hooks/useSocket";
+import { QAEvent } from "../../../websocket/websocket.types";
 
 interface CommentListProps {
   answerId: number;
@@ -34,6 +36,39 @@ const CommentList: React.FC<CommentListProps> = ({ answerId, isAdmin }) => {
       )
     );
   };
+  const handleQAEvent = useCallback(
+    (event: QAEvent) => {
+      if (event.type === "comment" && event.data.answerId === answerId) {
+        console.log("Comment event for answerId:", answerId, event);
+
+        switch (event.action) {
+          case "create":
+            // Only add if comment belongs to this answer
+            if (event.data.answerId === answerId) {
+              setComments((prev) => [event.data, ...prev]);
+            }
+            break;
+
+          case "update":
+            setComments((prev) =>
+              prev.map((comment) =>
+                comment.id === event.data.id ? event.data : comment
+              )
+            );
+            break;
+
+          case "delete":
+            setComments((prev) =>
+              prev.filter((comment) => comment.id !== event.data.id)
+            );
+            break;
+        }
+      }
+    },
+    [answerId]
+  );
+
+  useSocket(handleQAEvent);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
