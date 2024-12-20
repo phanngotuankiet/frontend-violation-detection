@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // src/components/admin/SearchMonitoringDashboard.tsx
 import React, { useEffect, useRef, useState } from "react";
 import {

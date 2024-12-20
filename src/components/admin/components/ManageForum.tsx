@@ -1,58 +1,16 @@
-// src/components/admin/components/ManageForum.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  CircularProgress,
-  Avatar,
-  IconButton,
-} from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
 import { adminService } from "../../../../api/admin.service";
 import QuestionDetailModal from "./modal/QuestionDetailModal";
-// import { answerApi } from "../../../../api/forum.service";
-// import { commentApi } from "../../../../api/forum.service";
-import Question from "@/constant/Question";
-// // import Answer from "@/constant/Answer";
-// // import Comment from "@/constant/Comment";
-// import {
-//   QuestionForForum,
-//   AnswerForForum,
-//   CommentForForum,
-//   UserForForum,
-// } from "@/constant/Forum";
-// import User from "@/constant/User";
-// import Comment from "@/constant/Comment";
-
-// interface QuestionDetail {
-//   id: number;
-//   title: string;
-//   content: string;
-//   user: {
-//     id: number;
-//     name: string;
-//     role: string;
-//   };
-//   answers: Answer[];
-//   createdAt: string;
-// }
-// interface QuestionDetail {
-//   id: number;
-//   title: string;
-//   content: string;
-//   userId: number;
-//   createdAt: string;
-//   updatedAt: string;
-//   user: User;
-//   answers: Answer[];
-// }
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const ManageForum: React.FC = () => {
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchQuestions();
   }, []);
@@ -78,209 +36,92 @@ const ManageForum: React.FC = () => {
     }
   };
 
-  // const handleDeleteAnswer = async (questionId: number, answerId: number) => {
-  //   try {
-  //     await adminService.deleteAnswer(answerId);
-  //     fetchQuestions();
-  //   } catch (error) {
-  //     console.error("Error deleting answer:", error);
-  //   }
-  // };
-
-  // const handleAcceptAnswer = async (answerId: number) => {
-  //   try {
-  //     await adminService.toggleAnswerAcceptance(answerId);
-  //     fetchQuestions();
-  //   } catch (error) {
-  //     console.error("Error accepting answer:", error);
-  //   }
-  // };
-
-  // const handleDeleteComment = async (commentId: number) => {
-  //   try {
-  //     await adminService.deleteComment(commentId);
-  //     fetchQuestions();
-  //   } catch (error) {
-  //     console.error("Error deleting comment:", error);
-  //   }
-  // };
-
-  // const handleAddAnswer = async (questionId: number, content: string) => {
-  //   if (!content.trim()) return;
-
-  //   try {
-  //     await answerApi.create({ content, questionId });
-  //     fetchQuestions();
-  //   } catch (error) {
-  //     console.error("Error adding answer:", error);
-  //   }
-  // };
-  // const handleAddComment = async (answerId: number, content: string) => {
-  //   if (!content.trim()) return;
-
-  //   try {
-  //     await commentApi.create({ content, answerId });
-  //     fetchQuestions();
-  //   } catch (error) {
-  //     console.error("Error adding comment:", error);
-  //   }
-  // };
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress />
-      </Box>
+      <div className="flex justify-center items-center p-8">
+        <div className="animate-spin border-4 border-t-4 border-gray-300 border-t-primary w-12 h-12 rounded-full"></div>
+      </div>
     );
   }
 
   return (
-    <Box sx={{ maxWidth: 1200, mx: "auto", p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Forum Management
-      </Typography>
+    <div className="w-full h-screen mx-auto p-6 bg-gradient-to-r from-blue-50 to-indigo-100">
+      <div className="flex justify-center items-center text-center mb-8 space-x-4">
+        <FontAwesomeIcon
+          icon={faArrowLeft}
+          size="2xl"
+          onClick={() => {
+            navigate("/superAdmin");
+          }}
+          className="cursor-pointer"
+        />
+        <h1 className="text-4xl font-extrabold text-center text-gray-900">
+          Forum Management
+        </h1>
+      </div>
 
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+      <div className="space-y-6 w-full flex flex-col justify-center items-center ">
         {questions.map((question) => (
-          <Paper
+          <div
             key={question.id}
+            className=" bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 cursor-pointer py-6 w-3/4"
             onClick={() => setSelectedQuestion(question.id)}
-            sx={{
-              p: 3,
-              cursor: "pointer",
-              transition: "all 0.2s ease-in-out",
-              "&:hover": {
-                transform: "translateY(-2px)",
-                boxShadow: (theme) => theme.shadows[4],
-              },
-            }}
           >
             {/* Title */}
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 600,
-                fontSize: "1.2rem",
-                lineHeight: 1.3,
-                mb: 2,
-                color: "text.primary",
-                "&:hover": {
-                  color: "primary.main",
-                },
-              }}
-            >
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800 hover:text-primary transition-colors duration-300">
               {question.title}
-            </Typography>
+            </h2>
 
             {/* Metadata and User Info */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              <Avatar
-                sx={{
-                  width: 32,
-                  height: 32,
-                  bgcolor: "primary.main",
-                  fontSize: "0.9rem",
-                  fontWeight: 500,
-                }}
-              >
-                {question.user.name.charAt(0)}
-              </Avatar>
+            <div className="flex items-center justify-between  text-gray-500 text-xl">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-primary text-white flex justify-center items-center rounded-full font-medium">
+                  {question.user.name.charAt(0)}
+                </div>
+                <span>{question.user.name}</span>
+                <span>●</span>
+                <span>{new Date(question.createdAt).toLocaleDateString()}</span>
+              </div>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                  color: "text.secondary",
-                  fontSize: "0.875rem",
-                  flex: 1,
-                }}
-              >
-                <Typography
-                  component="span"
-                  sx={{
-                    fontWeight: 500,
-                    color: "text.primary",
+              {/* Right-aligned answer count and delete button */}
+              <div className="flex items-center space-x-4 mr-4">
+                <span className="bg-gray-200 px-2 py-1 rounded-md text-primary">
+                  {question.answers.length} answers
+                </span>
+                <button
+                  className="text-red-600 hover:text-red-800"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteQuestion(question.id);
                   }}
                 >
-                  {question.user.name}
-                </Typography>
-
-                <Typography component="span" sx={{ fontSize: "4px" }}>
-                  ●
-                </Typography>
-
-                <Typography component="span">
-                  {new Date(question.createdAt).toLocaleDateString()}
-                </Typography>
-
-                <Typography component="span" sx={{ fontSize: "4px" }}>
-                  ●
-                </Typography>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    bgcolor: "action.selected",
-                    px: 1.5,
-                    py: 0.5,
-                    borderRadius: 1,
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  <Typography
-                    component="span"
-                    sx={{
-                      fontWeight: 500,
-                      color: "primary.main",
-                    }}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-5 h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
-                    {question.answers.length}
-                  </Typography>
-                  <Typography
-                    component="span"
-                    sx={{
-                      ml: 0.5,
-                      color: "text.secondary",
-                    }}
-                  >
-                    answers
-                  </Typography>
-                </Box>
-                <Typography
-                  component="span"
-                  sx={{
-                    ml: 0.5,
-                    color: "text.secondary",
-                  }}
-                >
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => handleDeleteQuestion(question.id)}
-                  >
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                </Typography>
-              </Box>
-            </Box>
-          </Paper>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
         ))}
-      </Box>
+      </div>
 
       <QuestionDetailModal
         open={!!selectedQuestion}
         onClose={() => setSelectedQuestion(null)}
-        // question={selectedQuestion}
-        // onDeleteAnswer={handleDeleteAnswer}
-        // onAcceptAnswer={handleAcceptAnswer}
-        // onDeleteComment={handleDeleteComment}
-        // onAddAnswer={handleAddAnswer}
-        // onAddComment={handleAddComment}
-        // fetchQuestions={fetchQuestions}
-        questionId={selectedQuestion}
+        questionId={selectedQuestion!}
       />
-    </Box>
+    </div>
   );
 };
 

@@ -8,8 +8,8 @@ import SuperAdmin from "../components/admin/Admin";
 import QuestionList from "../components/forum/Question/QuestionList";
 import QuestionDetail from "../components/forum/Question/QuestionDetail";
 import SearchMonitoringDashboard from "../components/admin/components/SearchMonitoringDashboard";
-import SearchStats from "@/components/admin/components/SearchStats";
 import Dashboard from "../components/dashboard/Dashboard";
+import ManageForum from "../components/admin/components/ManageForum";
 
 interface Route {
   path: string;
@@ -23,6 +23,8 @@ export const LoggedInRoutes: Route[] = [
   { path: "/profile", Component: Profile, protected: false },
   { path: "/evaluate", Component: Evaluate, protected: false },
   { path: "/superAdmin", Component: SuperAdmin, protected: true },
+  { path: "/superAdmin/forum", Component: ManageForum, protected: true },
+
   {
     path: "/superAdmin/monitoring",
     Component: SearchMonitoringDashboard,

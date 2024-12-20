@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddUser from "./components/AddUser";
 import UpdateUser from "./components/modal/UpdateUserModal";
 import ListUser from "./components/ListUser";
@@ -9,8 +7,7 @@ import { toast } from "react-toastify";
 import User from "../../constant/User";
 import OnDeleteModal from "./components/modal/OnDeleteModal";
 import OnLogoutModal from "./components/modal/OnLogoutModal";
-import SearchMonitoringDashboard from "./components/SearchMonitoringDashboard";
-import ManageForum from "./components/ManageForum";
+import Navbar from "../dashboard/Navbar";
 const SuperAdmin: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<User | null>(null);
@@ -64,28 +61,15 @@ const SuperAdmin: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 py-8 px-5">
-        <div className="container mx-auto max-w-6xl">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-white">
-              Bảng Điều Khiển Quản Trị Viên
-            </h1>
-            <button
-              onClick={() => setIsLogoutModalOpen(true)}
-              className="bg-white/10 backdrop-blur-lg text-white py-2.5 px-4 rounded-xl hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all duration-200 flex items-center space-x-2"
-            >
-              <FontAwesomeIcon icon={faSignOutAlt} />
-              <span>Đăng xuất</span>
-            </button>
-          </div>
-        </div>
-        <h1 className="text-3xl font-semibold text-center text-green-600 mb-8">
+    <div className="h-full w-full bg-gray-50">
+      <Navbar isAdmin={true} />
+      {/* Header */}
+
+      {/* //Body */}
+      <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 py-8 px-5 mt-4">
+        <h1 className="text-3xl font-semibold text-center text-black mb-8">
           Super Admin Dashboard
         </h1>
-        <SearchMonitoringDashboard />
-        <ManageForum />
-
         <AddUser
           onAddUser={handleAddUser}
           onClose={() => setIsAddUserModalOpen(false)}

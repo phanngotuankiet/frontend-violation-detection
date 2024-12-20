@@ -17,7 +17,7 @@ const ListUser: React.FC<ListUserProps> = ({
   setIsAddUserModalOpen,
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-2xl p-8 transform transition-all">
+    <div className="bg-white rounded-2xl shadow-2xl p-8 transform transition-all mt-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">
           Danh sách người dùng
@@ -34,16 +34,16 @@ const ListUser: React.FC<ListUserProps> = ({
         <table className="min-w-full">
           <thead>
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 tracking-wider border-b">
+              <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 tracking-wider border-b ">
                 Họ Tên
               </th>
-              <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 tracking-wider border-b">
+              <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 tracking-wider border-b">
                 Email
               </th>
-              <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 tracking-wider border-b">
+              <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 tracking-wider border-b">
                 Vai Trò
               </th>
-              <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 tracking-wider border-b">
+              <th className="px-6 py-4 text-center text-sm font-medium text-gray-700 tracking-wider border-b">
                 Thao Tác
               </th>
             </tr>
@@ -80,10 +80,10 @@ const ListUser: React.FC<ListUserProps> = ({
                       Sửa
                     </button>
                     {user.role !== "admin" && (
-                    <button
-                      onClick={() => setIdToDelete(user.id)}
-                      className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
-                    >
+                      <button
+                        onClick={() => setIdToDelete(user.id)}
+                        className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+                      >
                         Xóa
                       </button>
                     )}
@@ -93,7 +93,7 @@ const ListUser: React.FC<ListUserProps> = ({
             ) : (
               <tr>
                 <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                  Không tìm thấy người dùng nào
+                  Không có người dùng nào đang sử dụng hệ thống
                 </td>
               </tr>
             )}

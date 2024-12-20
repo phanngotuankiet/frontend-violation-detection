@@ -63,7 +63,7 @@ const SearchBar: React.FC = () => {
 
       if (sensitiveCheck.isSensitive) {
         const sensitiveData = {
-          id: sensitiveCheck.id,
+          id: sensitiveCheck?.id,
           searchTerm,
           category: sensitiveCheck.category,
           status: "pending",
