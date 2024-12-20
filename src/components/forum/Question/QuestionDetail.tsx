@@ -8,7 +8,6 @@ import AnswerList from "../Answer/AnswerList";
 import AddAnswer from "../Answer/AddAnswer";
 import Answer from "@/constant/Answer";
 import Navbar from "../../dashboard/Navbar";
-import { TrashIcon } from "@heroicons/react/20/solid";
 import { ArrowLeft } from "@mui/icons-material";
 
 interface QuestionDetail {
@@ -78,7 +77,7 @@ const QuestionDetail = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar isAdmin={false}/>
       <Container maxWidth="lg" className="mt-10">
         <div className="relative flex justify-start">
           <button
