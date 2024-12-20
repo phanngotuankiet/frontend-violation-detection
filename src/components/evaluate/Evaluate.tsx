@@ -4,8 +4,8 @@ import Navbar from "../dashboard/Navbar";
 import VideoAnalysisResult from "../analysis/VideoAnalysisResult";
 // import { VideoUploadPayload } from "@/constant/Video";
 import { VideoUploadPayload, videoService } from "../../../api/video.service";
-import axios from "axios";
-import { log } from "console";
+
+import DetectFrame from "./DetectFrame";
 
 interface AnalysisResult {
   confidences: {
@@ -25,10 +25,12 @@ const Evaluate = () => {
   );
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessingEnabled, setIsProcessingEnabled] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) return;
+    console.log(file.name);
 
     const formData = new FormData();
     formData.append("video", file);
@@ -36,6 +38,12 @@ const Evaluate = () => {
 
     try {
       setIsProcessing(true);
+      setIsProcessingEnabled(true);
+
+      const videoElement = document.querySelector("video");
+      if (videoElement) {
+        videoElement.play().catch(console.error);
+      }
       // const uploadResponse = await axios.post(
       //   "http://localhost:8000/api/v1/videos/process",
       //   formData,
@@ -71,7 +79,6 @@ const Evaluate = () => {
           setProgress(progress);
         }
       );
-      console.log(response);
       setAnalysisResult({
         confidences: response?.analysis.confidences,
         detected_crimes: response?.analysis.detected_crimes,
@@ -267,6 +274,9 @@ const Evaluate = () => {
           )}
         </div>
       </div>
+      {file && isProcessingEnabled && (
+        <DetectFrame isEnabled={isProcessingEnabled} videoFile={file} />
+      )}
     </div>
   );
 };

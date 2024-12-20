@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { CancelTokenSource } from "axios";
 
 const API_URL = "http://localhost:3000";
 const PYTHON_API_URL = "http://localhost:8000";
@@ -22,7 +22,36 @@ export interface VideoUploadPayload {
   file: File;
 }
 
+export interface DetectionResult {
+  status: "success" | "error";
+  data: {
+    confidences: Record<string, number>;
+    detected_crimes: string[];
+    detected_activities: string[];
+  };
+}
+
+export const CRIME_THRESHOLDS = {
+  vandalism: 0.3,
+  shooting: 0.4,
+  explosion: 0.4,
+  arrest: 0.1,
+  assault: 0.05,
+  fighting: 0.05,
+  "road accidents": 0.05,
+  robbery: 0.1,
+};
+export interface DetectionResponse {
+  status: "success" | "error";
+  data: {
+    confidences: Record<string, number>;
+    detected_crimes: string[];
+    detected_activities: string[];
+  };
+}
+
 export const videoService = {
+  currentDetectionRequest: null as CancelTokenSource | null,
   async uploadVideo(
     payload: VideoUploadPayload,
     onProgress?: (progress: number) => void
@@ -105,5 +134,22 @@ export const videoService = {
       console.error("Error fetching video:", error);
       throw error;
     }
+  },
+
+  async detectFrame(frame: Blob): Promise<DetectionResult> {
+    const formData = new FormData();
+    formData.append("image", frame);
+
+    const response = await axios.post(
+      "http://localhost:8000/api/v1/images/detect",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
   },
 };
