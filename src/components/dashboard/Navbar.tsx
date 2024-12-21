@@ -2,24 +2,36 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import OnLogoutModal from "../admin/components/modal/OnLogoutModal";
 
 interface NavbarProps {
   isAdmin: boolean;
   setIsLogoutModalOpen?: (open: boolean) => void;
 }
-
-const Navbar: React.FC<NavbarProps> = ({ isAdmin, setIsLogoutModalOpen }) => {
+const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
   const { accessToken } = useAuth();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const { logout } = useAuth();
 
+<<<<<<< Updated upstream
   const handleLogoutAdmin = () => {
     // logout();
     // setIsLoggedIn(false);
     // window.location.href = "/login";
     setIsLogoutModalOpen?.(true);
+=======
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true); // Mở modal
+  };
+
+  const confirmLogoutAdmin = () => {
+    logout(); // Đăng xuất
+    setIsLoggedIn(false);
+    window.location.href = "/login"; // Điều hướng
+>>>>>>> Stashed changes
   };
 
   const handleLogoutUser = () => {
@@ -79,11 +91,18 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin, setIsLogoutModalOpen }) => {
                       Tìm kiếm không phù hợp
                     </Link>
                     <button
-                      onClick={handleLogoutAdmin}
+                      onClick={handleLogoutClick}
                       className="flex items-center px-6 py-3 text-sm font-medium rounded-xl text-red-600 bg-white hover:bg-red-50 transition-colors shadow-lg"
                     >
                       Đăng xuất
                     </button>
+                    <div className="mt-4">
+                      <OnLogoutModal
+                        isOpen={isLogoutModalOpen}
+                        onClose={() => setIsLogoutModalOpen(false)}
+                        onConfirm={confirmLogoutAdmin}
+                      />
+                    </div>
                   </div>
                 </div>
               ) : (

@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AddUser from "./components/AddUser";
 import UpdateUser from "./components/modal/UpdateUserModal";
-import ListUser from "./components/ListUser";
 import { toast } from "react-toastify";
 import User from "../../constant/User";
 import OnDeleteModal from "./components/modal/OnDeleteModal";
 import OnLogoutModal from "./components/modal/OnLogoutModal";
-import Navbar from "../dashboard/Navbar";
 import { adminService } from "../../../api/admin.service";
 import AllStats from "./components/stats/AllStats";
 import { useAuth } from "../../context/AuthContext";
@@ -69,8 +67,6 @@ const SuperAdmin: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar isAdmin={true} setIsLogoutModalOpen={setIsLogoutModalOpen} />
-
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
         {/* <div className="mb-8 sm:flex sm:items-center sm:justify-between">
