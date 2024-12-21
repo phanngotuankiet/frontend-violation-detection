@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 
 interface NavbarProps {
   isAdmin: boolean;
-  setIsLogoutModalOpen: (open: boolean) => void;
+  setIsLogoutModalOpen?: (open: boolean) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ isAdmin, setIsLogoutModalOpen }) => {
@@ -19,7 +19,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin, setIsLogoutModalOpen }) => {
     // logout();
     // setIsLoggedIn(false);
     // window.location.href = "/login";
-    setIsLogoutModalOpen(true);
+    setIsLogoutModalOpen?.(true);
   };
 
   const handleLogoutUser = () => {
