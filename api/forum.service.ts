@@ -1,26 +1,26 @@
 import Answer from "@/constant/Answer";
 import Question from "@/constant/Question";
 import Comment from "@/constant/Comment";
-import axios from "axios";
+import axiosInstance from "./axios.config";
 
-const API_URL = "http://localhost:3000";
+// const API_URL = "http://localhost:3000";
 
-// Đây là axios instance với config mặc định
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+// // Đây là axios instance với config mặc định
+// const axiosInstance = axios.create({
+//   baseURL: API_URL,
+//   withCredentials: true,
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
 
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// axiosInstance.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("access_token");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 export const questionApi = {
   // Lấy tất cả câu hỏi
