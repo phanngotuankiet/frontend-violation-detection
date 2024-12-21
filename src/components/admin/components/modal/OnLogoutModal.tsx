@@ -38,7 +38,7 @@ const OnLogoutModal: React.FC<OnLogoutModalProps> = ({
             </h3>
             
             <p className="text-gray-600 mb-8">
-              Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?
+              Bạn có chắc chắn muốn đăng xuất?
             </p>
 
             <div className="flex justify-center space-x-4">

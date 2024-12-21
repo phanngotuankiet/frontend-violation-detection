@@ -5,17 +5,19 @@ import { useAuth } from "../../context/AuthContext";
 
 interface NavbarProps {
   isAdmin: boolean;
+  setIsLogoutModalOpen: (open: boolean) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
-  const { accessToken, logout } = useAuth();
+const Navbar: React.FC<NavbarProps> = ({ isAdmin, setIsLogoutModalOpen }) => {
+  const { accessToken } = useAuth();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    setIsLoggedIn(false);
-    window.location.href = "/login";
+    // logout();
+    // setIsLoggedIn(false);
+    // window.location.href = "/login";
+    setIsLogoutModalOpen(true);
   };
 
   useEffect(() => {

@@ -158,7 +158,7 @@ const ForumStats = () => {
         const data = await adminService.getForumStats();
         setStats(data);
       } catch (error) {
-        console.error("Error fetching forum stats:", error);
+        console.error("Lỗi khi lấy thống kê diễn đàn:", error);
       } finally {
         setLoading(false);
       }
@@ -167,17 +167,17 @@ const ForumStats = () => {
   }, []);
 
   if (loading || !stats) {
-    return <div>Loading...</div>;
+    return <div>Đang tải...</div>;
   }
 
-  // Sort monthly data chronologically
+  // Sắp xếp dữ liệu theo tháng
   const sortedMonthlyStats = [...stats.monthly].sort((a, b) => {
     const dateA = new Date(a.year, a.month - 1);
     const dateB = new Date(b.year, b.month - 1);
     return dateA.getTime() - dateB.getTime();
   });
 
-  // Calculate average answers per question
+  // Tính trung bình số câu trả lời trên mỗi câu hỏi
   const averageAnswersPerQuestion =
     stats.total.questions > 0
       ? (stats.total.answers / stats.total.questions).toFixed(2)
@@ -187,17 +187,17 @@ const ForumStats = () => {
     labels: sortedMonthlyStats.map((item) => `${item.month}/${item.year}`),
     datasets: [
       {
-        label: "Questions",
+        label: "Câu hỏi",
         data: sortedMonthlyStats.map((item) => item.questions),
         backgroundColor: "#4F46E5",
       },
       {
-        label: "Answers",
+        label: "Câu trả lời",
         data: sortedMonthlyStats.map((item) => item.answers),
         backgroundColor: "#10B981",
       },
       {
-        label: "Comments",
+        label: "Bình luận",
         data: sortedMonthlyStats.map((item) => item.comments),
         backgroundColor: "#F59E0B",
       },
@@ -206,23 +206,25 @@ const ForumStats = () => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6">Forum Activity Statistics</h2>
+      <h2 className="text-2xl font-bold mb-6">Thống kê hoạt động diễn đàn</h2>
 
       <div className="grid grid-cols-4 gap-4 mb-6">
         <div className="bg-indigo-50 p-4 rounded-lg">
-          <p className="text-indigo-600 font-semibold">Total Questions</p>
+          <p className="text-indigo-600 font-semibold">Tổng số câu hỏi</p>
           <p className="text-2xl font-bold">{stats.total.questions}</p>
         </div>
         <div className="bg-green-50 p-4 rounded-lg">
-          <p className="text-green-600 font-semibold">Total Answers</p>
+          <p className="text-green-600 font-semibold">Tổng số câu trả lời</p>
           <p className="text-2xl font-bold">{stats.total.answers}</p>
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg">
-          <p className="text-yellow-600 font-semibold">Total Comments</p>
+          <p className="text-yellow-600 font-semibold">Tổng số bình luận</p>
           <p className="text-2xl font-bold">{stats.total.comments}</p>
         </div>
         <div className="bg-blue-50 p-4 rounded-lg">
-          <p className="text-blue-600 font-semibold">Avg Answers/Question</p>
+          <p className="text-blue-600 font-semibold">
+            Trung bình câu trả lời/câu hỏi
+          </p>
           <p className="text-2xl font-bold">{averageAnswersPerQuestion}</p>
         </div>
       </div>
@@ -239,7 +241,7 @@ const ForumStats = () => {
               },
               title: {
                 display: true,
-                text: "Monthly Forum Activity",
+                text: "Hoạt động diễn đàn theo tháng",
               },
             },
             scales: {
