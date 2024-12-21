@@ -13,11 +13,19 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin, setIsLogoutModalOpen }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
-  const handleLogout = () => {
+  const { logout } = useAuth();
+
+  const handleLogoutAdmin = () => {
     // logout();
     // setIsLoggedIn(false);
     // window.location.href = "/login";
     setIsLogoutModalOpen(true);
+  };
+
+  const handleLogoutUser = () => {
+    logout();
+    setIsLoggedIn(false);
+    window.location.href = "/login";
   };
 
   useEffect(() => {
@@ -71,7 +79,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin, setIsLogoutModalOpen }) => {
                       Tìm kiếm không phù hợp
                     </Link>
                     <button
-                      onClick={handleLogout}
+                      onClick={handleLogoutAdmin}
                       className="flex items-center px-6 py-3 text-sm font-medium rounded-xl text-red-600 bg-white hover:bg-red-50 transition-colors shadow-lg"
                     >
                       Đăng xuất
@@ -130,7 +138,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin, setIsLogoutModalOpen }) => {
                           </Link>
 
                           <button
-                            onClick={handleLogout}
+                            onClick={handleLogoutUser}
                             className="w-full flex items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
                           >
                             <span className="flex-1 text-center">
