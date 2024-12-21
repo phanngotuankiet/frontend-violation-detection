@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setAccessToken, setEmail, setUser } = useAuth();
+  const { setAccessToken, setEmail, setUser, setRefreshToken } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -28,6 +28,7 @@ const Login = () => {
         const roleUser = response.user.role;
         if (roleUser === "user") {
           setAccessToken(response.access_token);
+          setRefreshToken(response.refresh_token);
           // setEmail(response.email);
           setUser({
             id: response.user.id,
@@ -38,6 +39,7 @@ const Login = () => {
           navigate("/evaluate");
         } else if (roleUser === "admin") {
           setAccessToken(response.access_token);
+          setRefreshToken(response.refresh_token);
           setUser({
             id: response.user.id,
             name: response.user.name,

@@ -2,17 +2,12 @@
 import User from "@/constant/User";
 import { createContext, useContext, useState, ReactNode } from "react";
 
-// interface User {
-//   id: number;
-//   name: string;
-//   email: string;
-//   role: string;
-// }
-
 interface AuthContextType {
   accessToken: string | null;
+  refreshToken: string | null;
   user: User | null;
   setAccessToken: (token: string | null) => void;
+  setRefreshToken: (token: string | null) => void;
   setEmail: (email: string | null) => void;
   setUser: (user: User | null) => void;
   logout: () => void;
@@ -23,6 +18,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(() =>
     localStorage.getItem("access_token")
+  );
+  const [refreshToken, setRefreshToken] = useState<string | null>(() =>
+    localStorage.getItem("refresh_token")
   );
 
   const [user, setUser] = useState<User | null>(() => {
@@ -39,6 +37,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const handleSetRefreshToken = (token: string | null) => {
+    setRefreshToken(token);
+    if (token) {
+      localStorage.setItem("refresh_token", token);
+    } else {
+      localStorage.removeItem("refresh_token");
+    }
+  };
+
   const handleSetUser = (userData: User | null) => {
     console.log("userData", userData);
     setUser(userData);
@@ -51,6 +58,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     handleSetAccessToken(null);
+    handleSetRefreshToken(null);
     handleSetUser(null);
   };
   const handleSetEmail = (email: string | null) => {
@@ -61,8 +69,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     accessToken,
+    refreshToken,
     user,
     setAccessToken: handleSetAccessToken,
+    setRefreshToken: handleSetRefreshToken,
     setUser: handleSetUser,
     setEmail: handleSetEmail,
     logout,

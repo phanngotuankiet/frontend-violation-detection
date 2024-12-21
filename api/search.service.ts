@@ -1,25 +1,25 @@
 // src/api/search.service.ts
 import { SearchPayload, SensitiveSearchResponse } from "@/constant/Search";
 import { SearchStatus } from "@/websocket/websocket.types";
-import axios from "axios";
+import axiosInstance from "./axios.config";
 
-const API_URL = "http://localhost:3000";
-// const WS_URL = "ws://localhost:3000/notifications";
+// const API_URL = "http://localhost:3000";
+// // const WS_URL = "ws://localhost:3000/notifications";
 
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// const axiosInstance = axios.create({
+//   baseURL: API_URL,
+//   withCredentials: true,
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
+// axiosInstance.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("access_token");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 export interface SearchResult {
   isSensitive: boolean;

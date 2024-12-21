@@ -1,20 +1,20 @@
 import axios, { CancelTokenSource } from "axios";
+import axiosInstance from "./axios.config";
 
-const API_URL = "http://localhost:3000";
 const PYTHON_API_URL = "http://localhost:8000";
 
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-});
+// const axiosInstance = axios.create({
+//   baseURL: API_URL,
+//   withCredentials: true,
+// });
 
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// axiosInstance.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("access_token");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 export interface VideoUploadPayload {
   title: string;
