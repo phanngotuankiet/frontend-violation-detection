@@ -78,4 +78,9 @@ export const adminService = {
     const response = await axiosInstance.get("/admin/stats/contributors");
     return response.data;
   },
+
+  searchUsers: async (query: string, page: number = 1, limit: number = 10) => {
+    const response = await axiosInstance.get(`/admin/users/search?q=${query}&page=${page}&limit=${limit}`);
+    return response.data;
+  },
 };

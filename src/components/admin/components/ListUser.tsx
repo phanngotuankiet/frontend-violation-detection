@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import User from "../../../constant/User";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Pagination from "../../../components/pagination/Pagination";
 import UserStats from "./stats/UserStats";
@@ -25,6 +25,8 @@ const ListUser: React.FC = () => {
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 10;
   const backend = import.meta.env.VITE_BACKEND_URL;
+  const [searchTerm, setSearchTerm] = useState("");
+
   const fetchUsers = async (page: number = 1) => {
     try {
       setIsLoading(true);
@@ -68,6 +70,21 @@ const ListUser: React.FC = () => {
     setCurrentPage(newPage);
   };
 
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      const response = await adminService.searchUsers(searchTerm, currentPage, itemsPerPage);
+      setUsers(response.data);
+      setTotalPages(response.meta.totalPages); 
+    } catch (error) {
+      console.error("Lỗi khi tìm kiếm:", error);
+      toast.error("Không thể tìm kiếm người dùng");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar isAdmin={true} />
@@ -95,6 +112,29 @@ const ListUser: React.FC = () => {
                 Thêm người dùng
               </button>
             </div>
+
+            {/* Search Bar */}
+            <div className="flex gap-2 mb-6">
+              <div className="flex-1">
+                <form onSubmit={handleSearch} className="flex gap-2">
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Tìm kiếm theo email hoặc tên..."
+                    className="w-1/4 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  />
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center"
+                  >
+                    <FontAwesomeIcon icon={faSearch} className="mr-2" />
+                    Tìm kiếm
+                  </button>
+                </form>
+              </div>
+            </div>
+
             <div className="overflow-x-auto">
               <table className="min-w-full">
                 <thead>
@@ -175,7 +215,7 @@ const ListUser: React.FC = () => {
               onPageChange={handlePageChange}
             />
 
-            <UserStats />
+            {/* <UserStats /> */}
           </div>
         </div>
       </div>
