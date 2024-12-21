@@ -79,7 +79,7 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
       const { data } = await questionApi.getById(Number(questionId));
       setQuestion(data);
     } catch (error) {
-      console.error("Failed to fetch question:", error);
+      console.error("Không thể tải chi tiết câu hỏi:", error);
     } finally {
       setLoading(false);
     }
@@ -90,7 +90,7 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
       await adminService.toggleAnswerAcceptance(answerId);
       fetchQuestionDetail();
     } catch (error) {
-      console.error("Failed to accept answer:", error);
+      console.error("Không thể chấp nhận câu trả lời:", error);
     }
   };
 
@@ -99,7 +99,7 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
   //     await answerApi.update(answerId, { content });
   //     fetchQuestionDetail();
   //   } catch (error) {
-  //     console.error("Failed to update answer:", error);
+  //     console.error("Không thể cập nhật câu trả lời:", error);
   //   }
   // };
 
@@ -108,7 +108,7 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
       await adminService.deleteAnswer(answerId);
       fetchQuestionDetail();
     } catch (error) {
-      console.error("Failed to delete answer:", error);
+      console.error("Không thể xóa câu trả lời:", error);
     }
   };
   const sortedAnswers = question?.answers.sort((a, b) => {
@@ -117,8 +117,7 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
   });
 
-  if (loading) return <div>Loading...</div>;
-  if (!question) return <div>Question not found</div>;
+  if (loading) return <div>Đang tải...</div>;
 
   return (
     <Dialog
@@ -134,195 +133,198 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
         },
       }}
     >
-      {/* Header */}
-      <Box
-        sx={{
-          px: 3,
-          py: 2.5,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderBottom: 1,
-          borderColor: "divider",
-          bgcolor: "grey.50",
-        }}
-      >
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 700,
-            color: "text.primary",
-          }}
-        >
-          Question Details
-        </Typography>
-        <IconButton onClick={onClose} size="small">
-          <CloseIcon />
-        </IconButton>
-      </Box>
-
-      <DialogContent sx={{ p: 0 }}>
-        <Box sx={{ p: 4 }}>
-          {/* Question Title Section */}
+      {question ? (
+        <>
+          {/* Phần đầu */}
           <Box
             sx={{
-              mb: 4,
-              pb: 3,
-              borderBottom: "1px solid",
+              px: 3,
+              py: 2.5,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderBottom: 1,
               borderColor: "divider",
+              bgcolor: "grey.50",
             }}
           >
             <Typography
               variant="h5"
               sx={{
-                fontWeight: 600,
-                color: "primary.main",
-                mb: 3,
-              }}
-            >
-              {question.title}
-            </Typography>
-
-            <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
-              <Avatar
-                sx={{
-                  width: 48,
-                  height: 48,
-                  bgcolor: "primary.main",
-                  fontSize: "1.2rem",
-                }}
-              >
-                {question.user.name.charAt(0)}
-              </Avatar>
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                    color: "text.primary",
-                    mb: 0.5,
-                  }}
-                >
-                  {question.user.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {new Date(question.createdAt).toLocaleString()}
-                </Typography>
-              </Box>
-            </Box>
-
-            <Typography
-              sx={{
+                fontWeight: 700,
                 color: "text.primary",
-                lineHeight: 1.7,
-                fontSize: "1rem",
               }}
             >
-              {question.content}
+              Chi tiết câu hỏi
             </Typography>
+            <IconButton onClick={onClose} size="small">
+              <CloseIcon />
+            </IconButton>
           </Box>
 
-          <Divider />
-
-          {/* Answers Section */}
-          <Box sx={{ mt: 3 }}>
-            <Typography
-              variant="h6"
-              sx={{
-                mb: 3,
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-              }}
-            >
-              <ChatBubbleIcon sx={{ fontSize: 20 }} />
-              {question.answers.length} Answers
-            </Typography>
-
-            {sortedAnswers?.map((answer) => (
-              <Paper
-                key={answer.id}
+          <DialogContent sx={{ p: 0 }}>
+            <Box sx={{ p: 4 }}>
+              {/* Phần tiêu đề câu hỏi */}
+              <Box
                 sx={{
-                  p: 2.5,
-                  mb: 2,
-                  // bgcolor: answer.isAccepted ? "success.light" : "grey.50",
-                  border: 1,
-                  borderColor: answer.isAccepted ? "success.main" : "grey.200",
-                  transition: "all 0.2s",
-                  "&:hover": {
-                    boxShadow: 1,
-                  },
+                  mb: 4,
+                  pb: 3,
+                  borderBottom: "1px solid",
+                  borderColor: "divider",
                 }}
               >
-                <Box sx={{ display: "flex", gap: 2 }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    fontWeight: 600,
+                    color: "primary.main",
+                    mb: 3,
+                  }}
+                >
+                  {question.title}
+                </Typography>
+
+                <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
                   <Avatar
                     sx={{
-                      width: 40,
-                      height: 40,
+                      width: 48,
+                      height: 48,
+                      bgcolor: "primary.main",
+                      fontSize: "1.2rem",
                     }}
                   >
-                    {answer.user.name.charAt(0)}
+                    {question.user.name.charAt(0)}
                   </Avatar>
-
-                  <Box sx={{ flex: 1 }}>
-                    <Box
+                  <Box>
+                    <Typography
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        mb: 1,
+                        fontSize: "1.1rem",
+                        fontWeight: 600,
+                        color: "text.primary",
+                        mb: 0.5,
                       }}
                     >
-                      <Box>
-                        <Typography sx={{ fontWeight: 500 }}>
-                          {answer.user.name}
-                          {answer.user.role === "admin" && (
-                            <CheckCircleIcon
-                              sx={{
-                                ml: 1,
-                                width: 16,
-                                height: 16,
-                                color: "primary.main",
-                              }}
-                            />
-                          )}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {new Date(answer.createdAt).toLocaleString()}
-                          {answer.isEdited && " • edited"}
-                        </Typography>
-                      </Box>
+                      {question.user.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {new Date(question.createdAt).toLocaleString()}
+                    </Typography>
+                  </Box>
+                </Box>
 
-                      <Box sx={{ display: "flex", gap: 1 }}>
-                        <IconButton
-                          size="small"
-                          onClick={() => handleAnswerAccept(answer.id)}
+                <Typography
+                  sx={{
+                    color: "text.primary",
+                    lineHeight: 1.7,
+                    fontSize: "1rem",
+                  }}
+                >
+                  {question.content}
+                </Typography>
+              </Box>
+
+              <Divider />
+
+              {/* Phần câu trả lời */}
+              <Box sx={{ mt: 3 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    mb: 3,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <ChatBubbleIcon sx={{ fontSize: 20 }} />
+                  {question.answers.length} Câu trả lời
+                </Typography>
+
+                {sortedAnswers?.map((answer) => (
+                  <Paper
+                    key={answer.id}
+                    sx={{
+                      p: 2.5,
+                      mb: 2,
+                      border: 1,
+                      borderColor: answer.isAccepted
+                        ? "success.main"
+                        : "grey.200",
+                      transition: "all 0.2s",
+                      "&:hover": {
+                        boxShadow: 1,
+                      },
+                    }}
+                  >
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                      <Avatar
+                        sx={{
+                          width: 40,
+                          height: 40,
+                        }}
+                      >
+                        {answer.user.name.charAt(0)}
+                      </Avatar>
+
+                      <Box sx={{ flex: 1 }}>
+                        <Box
                           sx={{
-                            color: answer.isAccepted
-                              ? "success.main"
-                              : "action.active",
-                            "&:hover": {
-                              color: "success.main",
-                            },
+                            display: "flex",
+                            justifyContent: "space-between",
+                            mb: 1,
                           }}
                         >
-                          <CheckCircleIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          size="small"
-                          color="error"
-                          onClick={() => handleAnswerDelete(answer.id)}
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </Box>
-                    </Box>
+                          <Box>
+                            <Typography sx={{ fontWeight: 500 }}>
+                              {answer.user.name}
+                              {answer.user.role === "admin" && (
+                                <CheckCircleIcon
+                                  sx={{
+                                    ml: 1,
+                                    width: 16,
+                                    height: 16,
+                                    color: "primary.main",
+                                  }}
+                                />
+                              )}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                              {new Date(answer.createdAt).toLocaleString()}
+                              {answer.isEdited && " • đã chỉnh sửa"}
+                            </Typography>
+                          </Box>
 
-                    <Typography sx={{ mt: 1, mb: 2 }}>
-                      {answer.content}
-                    </Typography>
+                          <Box sx={{ display: "flex", gap: 1 }}>
+                            <IconButton
+                              size="small"
+                              onClick={() => handleAnswerAccept(answer.id)}
+                              sx={{
+                                color: answer.isAccepted
+                                  ? "success.main"
+                                  : "action.active",
+                                "&:hover": {
+                                  color: "success.main",
+                                },
+                              }}
+                            >
+                              <CheckCircleIcon fontSize="small" />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() => handleAnswerDelete(answer.id)}
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                          </Box>
+                        </Box>
 
-                    {/* Comments */}
-                    {/* {answer.comments?.length > 0 && (
+                        <Typography sx={{ mt: 1, mb: 2 }}>
+                          {answer.content}
+                        </Typography>
+
+                        {/* Comments */}
+                        {/* {answer.comments?.length > 0 && (
                       <Box
                         sx={{
                           ml: 2,
@@ -387,10 +389,10 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
                         ))}
                       </Box>
                     )} */}
-                    <CommentList answerId={answer.id} isAdmin={isAdmin} />
+                        <CommentList answerId={answer.id} isAdmin={isAdmin} />
 
-                    {/* Add Comment */}
-                    {/* <Box
+                        {/* Add Comment */}
+                        {/* <Box
                       component="form"
                       onSubmit={handleAddComment}
                       sx={{ mt: 2 }}
@@ -425,14 +427,14 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
                         {isSubmittingComment ? "Posting..." : "Comment"}
                       </Button>
                     </Box> */}
-                  </Box>
-                </Box>
-              </Paper>
-            ))}
-          </Box>
+                      </Box>
+                    </Box>
+                  </Paper>
+                ))}
+              </Box>
 
-          {/* Add Answer */}
-          {/* <Box component="form" onSubmit={handleAddAnswer} sx={{ mt: 4 }}>
+              {/* Add Answer */}
+              {/* <Box component="form" onSubmit={handleAddAnswer} sx={{ mt: 4 }}>
             <Typography variant="h6" sx={{ mb: 2 }}>
               Add an Answer
             </Typography>
@@ -453,14 +455,18 @@ const QuestionDetailModal: React.FC<QuestionDetailModalProps> = ({
               {isSubmittingAnswer ? "Posting..." : "Submit Answer"}
             </Button>
           </Box> */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <AddAnswer
-              questionId={questionId}
-              onAnswerAdded={fetchQuestionDetail}
-            />
-          </div>
-        </Box>
-      </DialogContent>
+              <div className="bg-white rounded-xl border border-gray-200 p-6">
+                <AddAnswer
+                  questionId={questionId}
+                  onAnswerAdded={fetchQuestionDetail}
+                />
+              </div>
+            </Box>
+          </DialogContent>
+        </>
+      ) : (
+        <div>Không tìm thấy câu hỏi</div>
+      )}
     </Dialog>
   );
 };

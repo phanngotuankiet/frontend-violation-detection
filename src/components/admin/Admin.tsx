@@ -10,7 +10,10 @@ import OnLogoutModal from "./components/modal/OnLogoutModal";
 import Navbar from "../dashboard/Navbar";
 import { adminService } from "../../../api/admin.service";
 import AllStats from "./components/stats/AllStats";
+import { useAuth } from "../../context/AuthContext";
+
 const SuperAdmin: React.FC = () => {
+  const { logout } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<User | null>(null);
   const [idToDelete, setIdToDelete] = useState<number | null>(null);
@@ -55,9 +58,8 @@ const SuperAdmin: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("email");
+  const handleLogout = async () => {
+    await logout();
     window.location.href = "/login";
   };
 
@@ -67,15 +69,15 @@ const SuperAdmin: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar isAdmin={true} />
+      <Navbar isAdmin={true} setIsLogoutModalOpen={setIsLogoutModalOpen} />
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 sm:flex sm:items-center sm:justify-between">
+        {/* <div className="mb-8 sm:flex sm:items-center sm:justify-between">
           <div className="mb-4 sm:mb-0">
             <h1 className="text-2xl font-bold text-gray-900">Thống kê</h1>
           </div>
-        </div>
+        </div> */}
 
         {/* Main Content */}
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">

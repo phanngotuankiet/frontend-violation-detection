@@ -5,6 +5,10 @@ import QuestionDetailModal from "./modal/QuestionDetailModal";
 
 import Navbar from "../../dashboard/Navbar";
 import Pagination from "../../pagination/Pagination";
+import { Button } from "@mui/material";
+import { EyeIcon } from "@heroicons/react/24/outline";
+
+import OnLogoutModal from "./modal/OnLogoutModal";
 
 const ManageForum: React.FC = () => {
   const [questions, setQuestions] = useState<any[]>([]);
@@ -23,7 +27,7 @@ const ManageForum: React.FC = () => {
       setQuestions(data.data);
       setTotalPages(data.meta.lastPage);
     } catch (error) {
-      console.error("Error fetching questions:", error);
+      console.error("Lỗi khi tải câu hỏi:", error);
     } finally {
       setLoading(false);
     }
@@ -37,7 +41,7 @@ const ManageForum: React.FC = () => {
       await adminService.deleteQuestion(id);
       setQuestions((prev) => prev.filter((q) => q.id !== id));
     } catch (error) {
-      console.error("Error deleting question:", error);
+      console.error("Lỗi khi xóa câu hỏi:", error);
     }
   };
 
@@ -54,7 +58,7 @@ const ManageForum: React.FC = () => {
       <Navbar isAdmin={true} />
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Header Section */}
+        {/* Phần tiêu đề */}
         <div className="mb-8">
           <div className="flex items-center justify-start">
             {/* <button
@@ -62,7 +66,7 @@ const ManageForum: React.FC = () => {
               className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
             >
               <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
-              <span>Back</span>
+              <span>Quay lại</span>
             </button> */}
             <h1 className="text-2xl font-bold text-gray-900">
               Quản lí diễn đàn
@@ -70,7 +74,7 @@ const ManageForum: React.FC = () => {
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Nội dung chính */}
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           {loading ? (
             <div className="flex items-center justify-center h-64">
@@ -82,16 +86,16 @@ const ManageForum: React.FC = () => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      No.
+                      STT
                     </th>
                     <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Title
+                      Tiêu đề
                     </th>
                     <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Author
+                      Tác giả
                     </th>
                     <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
+                      Thao tác
                     </th>
                   </tr>
                 </thead>
@@ -117,12 +121,22 @@ const ManageForum: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button
+                        <Button
                           onClick={() => setSelectedQuestion(question.id)}
-                          className="text-indigo-600 hover:text-indigo-900 font-medium"
+                          startIcon={<EyeIcon />}
+                          size="small"
+                          variant="outlined"
+                          sx={{
+                            borderRadius: 2,
+                            textTransform: "none",
+                            borderColor: "#1d4ed8",
+                            background:
+                              "linear-gradient(to right, #2563eb, #4f46e5)",
+                            color: "white",
+                          }}
                         >
-                          View Details
-                        </button>
+                          Xem chi tiết
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -131,7 +145,7 @@ const ManageForum: React.FC = () => {
             </div>
           )}
         </div>
-        {/* Pagination */}
+        {/* Phân trang */}
         <div className="px-6 py-4 border-t border-gray-200">
           <Pagination
             currentPage={currentPage}
