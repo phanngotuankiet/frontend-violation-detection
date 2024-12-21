@@ -1,23 +1,23 @@
-import axios from "axios";
+import axiosInstance from "./axios.config";
 
-const API_URL = "http://localhost:3000";
+// const API_URL = "http://localhost:3000";
 
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+// const axiosInstance = axios.create({
+//   baseURL: API_URL,
+//   withCredentials: true,
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
 
-// Add token to requests
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// // Add token to requests
+// axiosInstance.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("access_token");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 export interface User {
   id: number;

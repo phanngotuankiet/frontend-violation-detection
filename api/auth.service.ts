@@ -1,15 +1,4 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:3000";
-
-// Đây là axios instance với config mặc định
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+import axiosInstance from "./axios.config";
 
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
@@ -47,6 +36,13 @@ export const authService = {
 
   login: async (payload: LoginPayload) => {
     const response = await axiosInstance.post("/auth/login", payload);
+    return response.data;
+  },
+
+  refreshToken: async (refreshToken: string) => {
+    const response = await axiosInstance.post("/auth/refresh", {
+      refresh_token: refreshToken,
+    });
     return response.data;
   },
 };

@@ -1,22 +1,20 @@
-import axios from "axios";
+import axiosInstance from "./axios.config";
 
-const API_URL = "http://localhost:3000";
+// const axiosInstance = axios.create({
+//   baseURL: API_URL,
+//   withCredentials: true,
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
 
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// axiosInstance.interceptors.request.use((config) => {
+//   const token = localStorage.getItem("access_token");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 export const adminService = {
   getAllUsers: async (page: number = 1, limit: number = 10) => {
