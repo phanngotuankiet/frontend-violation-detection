@@ -14,9 +14,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import HistoryIcon from "@mui/icons-material/History";
 import ClearIcon from "@mui/icons-material/Clear";
 import { searchService } from "../../../api/search.service";
-import VideoList from "../video/VideoList";
 import io, { Socket } from "socket.io-client";
-import { Video } from "../../constant/Video";
 
 const SEARCH_FILTERS = [
   "Tất cả",
@@ -27,9 +25,18 @@ const SEARCH_FILTERS = [
   "Phá hoại",
 ];
 
-const SearchBar: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [videos, setVideos] = useState<Video[]>([]);
+interface SearchBarProps {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  handleSearch: () => void;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({
+  searchTerm,
+  setSearchTerm,
+  handleSearch,
+}) => {
+  // const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState("Tất cả");
@@ -79,22 +86,25 @@ const SearchBar: React.FC = () => {
         return;
       }
 
-      const result = await searchService.searchVideos(searchTerm);
-      const formattedVideos = (result.videos || []).map(
-        (video: Partial<Video>) => ({
-          id: video.id!,
-          title: video.title || "",
-          description: video.description || "",
-          thumbnailUrl: video.thumbnailUrl || "",
-          url: video.url || "",
-          createdAt: video.createdAt || new Date().toISOString(),
-        })
-      );
+      // const result = await searchService.searchVideos(searchTerm);
+      // const formattedVideos = (result.videos || []).map(
+      //   (video: Partial<Video>) => ({
+      //     id: video.id!,
+      //     title: video.title || "",
+      //     description: video.description || "",
+      //     thumbnailUrl: video.thumbnailUrl || "",
+      //     url: video.url || "",
+      //     createdAt: video.createdAt || new Date().toISOString(),
+      //   })
+      // );
 
-      setVideos(formattedVideos);
-      setSearchHistory((prev) =>
-        [...new Set([searchTerm, ...prev])].slice(0, 5)
-      );
+      // setVideos(formattedVideos);
+      // setSearchHistory((prev) =>
+      //   [...new Set([searchTerm, ...prev])].slice(0, 5)
+      // );
+
+      // dò tìm từ bậy xong thì thực hiện lọc video
+      await handleSearch();
     } catch (error) {
       setError(error instanceof Error ? error.message : "Đã xảy ra lỗi");
     } finally {
@@ -213,7 +223,7 @@ const SearchBar: React.FC = () => {
         </motion.div>
       )}
 
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {videos.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -224,7 +234,7 @@ const SearchBar: React.FC = () => {
             <VideoList videos={videos} />
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </div>
   );
 };

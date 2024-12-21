@@ -3,7 +3,7 @@ import { useState } from "react";
 import Navbar from "../dashboard/Navbar";
 import VideoAnalysisResult from "../analysis/VideoAnalysisResult";
 // import { VideoUploadPayload } from "@/constant/Video";
-import { VideoUploadPayload, videoService } from "../../../api/video.service";
+import { videoService } from "../../../api/video.service";
 
 import DetectFrame from "./DetectFrame";
 import { useAuth } from "../../context/AuthContext";
@@ -19,7 +19,6 @@ const Evaluate = () => {
   const { user: currentUser } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [progress, setProgress] = useState(0);
   const [thumbnail, setThumbnail] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
@@ -137,7 +136,7 @@ const Evaluate = () => {
                     />
                   </div>
 
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Description
                     </label>
@@ -146,7 +145,7 @@ const Evaluate = () => {
                       onChange={(e) => setDescription(e.target.value)}
                       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500"
                     />
-                  </div>
+                  </div> */}
                   <svg
                     className="mx-auto h-12 w-12 text-gray-400"
                     fill="none"
