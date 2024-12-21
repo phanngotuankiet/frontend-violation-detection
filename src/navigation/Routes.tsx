@@ -16,21 +16,43 @@ interface Route {
   path: string;
   Component: ComponentType;
   protected: boolean;
+  isNavbar: boolean;
 }
 
 export const LoggedInRoutes: Route[] = [
-  { path: "/", Component: Evaluate, protected: false },
-  { path: "/processedVideos", Component: ProcessedVideos, protected: false },
-  { path: "/profile", Component: Profile, protected: false },
-  { path: "/evaluate", Component: Evaluate, protected: false },
-  { path: "/superAdmin", Component: SuperAdmin, protected: true },
-  { path: "/superAdmin/forum", Component: ManageForum, protected: true },
-  { path: "/superAdmin/users", Component: ListUser, protected: true },
+  { path: "/", Component: Evaluate, protected: false, isNavbar: true },
+  {
+    path: "/processedVideos",
+    Component: ProcessedVideos,
+    protected: false,
+    isNavbar: true,
+  },
+  { path: "/profile", Component: Profile, protected: false, isNavbar: true },
+  { path: "/evaluate", Component: Evaluate, protected: false, isNavbar: true },
+  {
+    path: "/superAdmin",
+    Component: SuperAdmin,
+    protected: true,
+    isNavbar: true,
+  },
+  {
+    path: "/superAdmin/forum",
+    Component: ManageForum,
+    protected: true,
+    isNavbar: true,
+  },
+  {
+    path: "/superAdmin/users",
+    Component: ListUser,
+    protected: true,
+    isNavbar: true,
+  },
 
   {
     path: "/superAdmin/monitoring",
     Component: SearchMonitoringDashboard,
     protected: true,
+    isNavbar: true,
   },
   // {
   //   path: "/superAdmin/questions/:id",
@@ -39,13 +61,18 @@ export const LoggedInRoutes: Route[] = [
   // },
   // { path: "/superAdmin/stats", Component: SearchStats, protected: true },
 
-  { path: "/forum", Component: QuestionList, protected: false },
-  { path: "questions/:id", Component: QuestionDetail, protected: false },
-  { path: "*", Component: Evaluate, protected: false },
+  { path: "/forum", Component: QuestionList, protected: false, isNavbar: true },
+  {
+    path: "questions/:id",
+    Component: QuestionDetail,
+    protected: false,
+    isNavbar: true,
+  },
+  { path: "*", Component: Evaluate, protected: false, isNavbar: true },
 ];
 
 export const LoggedOutRoutes: Route[] = [
-  { path: "/login", Component: Login, protected: false },
-  { path: "/signup", Component: SignUp, protected: false },
-  { path: "/", Component: Dashboard, protected: false },
+  { path: "/login", Component: Login, protected: false, isNavbar: false },
+  { path: "/signup", Component: SignUp, protected: false, isNavbar: false },
+  { path: "/", Component: Dashboard, protected: false, isNavbar: false },
 ];

@@ -127,7 +127,6 @@ const QuestionDetail = () => {
 
   return (
     <>
-      <Navbar isAdmin={false}/>
       <Container maxWidth="lg" className="mt-10">
         <div className="relative flex justify-start">
           <button

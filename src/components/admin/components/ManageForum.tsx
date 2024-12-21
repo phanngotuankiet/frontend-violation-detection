@@ -9,6 +9,8 @@ import { Button } from "@mui/material";
 import { EyeIcon } from "@heroicons/react/24/outline";
 
 import OnLogoutModal from "./modal/OnLogoutModal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRemove } from "@fortawesome/free-solid-svg-icons";
 
 const ManageForum: React.FC = () => {
   const [questions, setQuestions] = useState<any[]>([]);
@@ -55,8 +57,6 @@ const ManageForum: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar isAdmin={true} />
-
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Phần tiêu đề */}
         <div className="mb-8">
@@ -137,6 +137,9 @@ const ManageForum: React.FC = () => {
                         >
                           Xem chi tiết
                         </Button>
+                      </td>
+                      <td>
+                        <FontAwesomeIcon icon={faRemove} />
                       </td>
                     </tr>
                   ))}

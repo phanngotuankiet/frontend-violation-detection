@@ -96,7 +96,6 @@ export const QuestionList: React.FC = () => {
     );
   return (
     <>
-      <Navbar isAdmin={false}/>
       <Container maxWidth="lg" className={styles.container}>
         <Box sx={{ mb: 5 }}>
           <Stack
