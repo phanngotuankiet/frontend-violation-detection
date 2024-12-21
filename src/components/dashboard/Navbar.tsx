@@ -48,19 +48,25 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
                       to="/superAdmin"
                       className="mr-6 text-blue-100 hover:text-white transition-colors"
                     >
-                      User
+                      Thống kê
+                    </Link>
+                    <Link
+                      to="/superAdmin/users"
+                      className="mr-6 text-blue-100 hover:text-white transition-colors"
+                    >
+                      Người dùng
                     </Link>
                     <Link
                       to="/superAdmin/forum"
                       className="mr-6 text-blue-100 hover:text-white transition-colors"
                     >
-                      Forum
+                      Diễn đàn
                     </Link>
                     <Link
                       to="/superAdmin/monitoring"
                       className="mr-6 text-blue-100 hover:text-white transition-colors"
                     >
-                      Sensitive Search
+                      Tìm kiếm không phù hợp
                     </Link>
                     <button
                       onClick={handleLogout}

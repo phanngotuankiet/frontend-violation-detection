@@ -6,6 +6,7 @@ import VideoAnalysisResult from "../analysis/VideoAnalysisResult";
 import { VideoUploadPayload, videoService } from "../../../api/video.service";
 
 import DetectFrame from "./DetectFrame";
+import { useAuth } from "../../context/AuthContext";
 
 interface AnalysisResult {
   confidences: {
@@ -15,6 +16,7 @@ interface AnalysisResult {
 }
 
 const Evaluate = () => {
+  const { user: currentUser } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -44,41 +46,20 @@ const Evaluate = () => {
       if (videoElement) {
         videoElement.play().catch(console.error);
       }
-      // const uploadResponse = await axios.post(
-      //   "http://localhost:8000/api/v1/videos/process",
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //     onUploadProgress: (progressEvent) => {
-      //       if (progressEvent.total) {
-      //         const percentCompleted = Math.round(
-      //           (progressEvent.loaded * 100) / progressEvent.total
-      //         );
-      //         setProgress(percentCompleted);
-      //       }
-      //     },
-      //   }
-      // );
 
-      // if (uploadResponse.status === 200) {
-      //   const { data } = uploadResponse.data;
-      //   setAnalysisResult({
-      //     confidences: data.confidences,
-      //     detected_crimes: data.detected_crimes,
-      //   });
-      // }
+      const userId = currentUser?.id;
       const response = await videoService.uploadVideo(
         {
           title,
-          description,
+          userId: userId || 0,
           file,
         },
         (progress) => {
           setProgress(progress);
         }
       );
+      console.log(response);
+
       setAnalysisResult({
         confidences: response?.analysis.confidences,
         detected_crimes: response?.analysis.detected_crimes,

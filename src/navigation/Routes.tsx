@@ -10,6 +10,7 @@ import QuestionDetail from "../components/forum/Question/QuestionDetail";
 import SearchMonitoringDashboard from "../components/admin/components/SearchMonitoringDashboard";
 import Dashboard from "../components/dashboard/Dashboard";
 import ManageForum from "../components/admin/components/ManageForum";
+import ListUser from "../components/admin/components/ListUser";
 
 interface Route {
   path: string;
@@ -24,6 +25,7 @@ export const LoggedInRoutes: Route[] = [
   { path: "/evaluate", Component: Evaluate, protected: false },
   { path: "/superAdmin", Component: SuperAdmin, protected: true },
   { path: "/superAdmin/forum", Component: ManageForum, protected: true },
+  { path: "/superAdmin/users", Component: ListUser, protected: true },
 
   {
     path: "/superAdmin/monitoring",

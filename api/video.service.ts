@@ -20,6 +20,7 @@ export interface VideoUploadPayload {
   title: string;
   description?: string;
   file: File;
+  userId: number;
 }
 
 export interface DetectionResult {
@@ -61,6 +62,9 @@ export const videoService = {
       const formData = new FormData();
       formData.append("file", payload.file);
       formData.append("title", payload.title);
+      formData.append("userId", payload.userId.toString());
+      console.log(payload);
+
       if (payload.description) {
         formData.append("description", payload.description);
       }

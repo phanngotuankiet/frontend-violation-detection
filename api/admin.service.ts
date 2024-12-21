@@ -1,4 +1,3 @@
-import Question from "@/constant/Question";
 import axios from "axios";
 
 const API_URL = "http://localhost:3000";
@@ -67,6 +66,18 @@ export const adminService = {
   },
   deleteComment: async (id: number) => {
     const response = await axiosInstance.delete(`/admin/comments/${id}`);
+    return response.data;
+  },
+  getUserStats: async () => {
+    const response = await axiosInstance.get("/admin/stats/users");
+    return response.data;
+  },
+  getForumStats: async () => {
+    const response = await axiosInstance.get("/admin/stats/forum");
+    return response.data;
+  },
+  getTopContributors: async () => {
+    const response = await axiosInstance.get("/admin/stats/contributors");
     return response.data;
   },
 };

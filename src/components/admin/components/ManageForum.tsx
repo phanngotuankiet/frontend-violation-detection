@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { adminService } from "../../../../api/admin.service";
 import QuestionDetailModal from "./modal/QuestionDetailModal";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+
 import Navbar from "../../dashboard/Navbar";
 import Pagination from "../../pagination/Pagination";
 
@@ -14,7 +12,7 @@ const ManageForum: React.FC = () => {
   const [selectedQuestion, setSelectedQuestion] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const fetchQuestions = async (page: number = 1) => {
     try {

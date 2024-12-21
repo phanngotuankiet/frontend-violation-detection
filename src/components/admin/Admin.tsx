@@ -9,6 +9,7 @@ import OnDeleteModal from "./components/modal/OnDeleteModal";
 import OnLogoutModal from "./components/modal/OnLogoutModal";
 import Navbar from "../dashboard/Navbar";
 import { adminService } from "../../../api/admin.service";
+import AllStats from "./components/stats/AllStats";
 const SuperAdmin: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<User | null>(null);
@@ -54,10 +55,6 @@ const SuperAdmin: React.FC = () => {
     }
   };
 
-  const handleEditUser = (user: User) => {
-    setEditUser(user);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("email");
@@ -66,9 +63,6 @@ const SuperAdmin: React.FC = () => {
 
   const handleAddUser = (newUser: User) => {
     setUsers((prevUsers) => [...prevUsers, newUser]);
-  };
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
   };
 
   return (
@@ -79,39 +73,13 @@ const SuperAdmin: React.FC = () => {
         {/* Header */}
         <div className="mb-8 sm:flex sm:items-center sm:justify-between">
           <div className="mb-4 sm:mb-0">
-            <h1 className="text-2xl font-bold text-gray-900">
-              User Management
-            </h1>
-            <p className="mt-1 text-sm text-gray-500">
-              Manage system users and their permissions
-            </p>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setIsAddUserModalOpen(true)}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Add New User
-            </button>
+            <h1 className="text-2xl font-bold text-gray-900">Thống kê</h1>
           </div>
         </div>
 
         {/* Main Content */}
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <ListUser
-            users={users}
-            onEditUser={handleEditUser}
-            onDeleteUser={handleDeleteUser}
-            setIdToDelete={setIdToDelete}
-            setIsAddUserModalOpen={setIsAddUserModalOpen}
-            isLoading={isLoading}
-            pagination={{
-              currentPage,
-              totalPages,
-              onPageChange: handlePageChange,
-            }}
-          />
+          <AllStats />
         </div>
       </div>
 

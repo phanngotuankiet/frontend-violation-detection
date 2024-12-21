@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   DetectionResponse,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   DetectionResult,
   videoService,
 } from "../../../api/video.service";
@@ -107,6 +109,7 @@ export default function DetectFrame({
       processingQueue.current = processingQueue.current.then(async () => {
         try {
           const result = await videoService.detectFrame(blob);
+
           if (result?.status === "success" && result.data) {
             const { confidences, detected_activities } = result.data;
             const activity = {
@@ -167,7 +170,7 @@ export default function DetectFrame({
 
     return () => {
       video.removeEventListener("loadedmetadata", handleMetadata);
-      video.pause();
+      // video.pause();
       video.src = "";
       URL.revokeObjectURL(videoUrl);
 

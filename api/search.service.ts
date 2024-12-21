@@ -72,4 +72,8 @@ export const searchService = {
     const response = await axiosInstance.post("search/check", payload);
     return response.data;
   },
+  getSensitiveStats: async () => {
+    const response = await axiosInstance.get("/search/stats/sensitive");
+    return response.data;
+  },
 };
